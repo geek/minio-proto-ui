@@ -1,0 +1,49 @@
+{
+  "name": "minio-proto-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "joyent-react-scripts build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@manaflair/redux-batch": "^0.1.0",
+    "chart.js": "^2.7.1",
+    "force-array": "^3.1.0",
+    "joyent-ui-toolkit": "^2.0.1",
+    "lodash.find": "^4.6.0",
+    "lodash.get": "^4.4.2",
+    "lodash.isstring": "^4.0.1",
+    "lodash.sortby": "^4.7.0",
+    "lunr": "^2.1.4",
+    "normalized-styled-components": "^1.0.17",
+    "param-case": "^2.1.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
+    "react-apollo": "^2.0.1",
+    "react-dom": "^16.1.1",
+    "react-json-view": "^1.13.3",
+    "react-redux": "^5.0.6",
+    "react-redux-values": "^1.0.2",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-styled-flexboxgrid": "^2.1.1",
+    "redux": "^3.7.2",
+    "redux-form": "^7.1.2",
+    "remcalc": "^1.0.9",
+    "styled-components": "^2.2.3",
+    "styled-is": "^1.1.0",
+    "title-case": "^2.1.1",
+    "unitcalc": "^1.1.1"
+  },
+  "devDependencies": {
+    "eslint-config-joyent-portal": "^3.2.0",
+    "eslint-config-prettier": "^2.7.0",
+    "eslint-config-xo-space": "^0.17.0",
+    "eslint-plugin-markdown": "^1.0.0-beta.6",
+    "joyent-react-scripts": "^3.1.0"
+  }
+}
