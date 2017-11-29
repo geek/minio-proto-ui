@@ -1,5 +1,0 @@
-mutation deleteMachineSnapshot($id: ID!, $snapshot: ID!) {
-  deleteMachineSnapshot(id: $id, snapshot: $snapshot) {
-    name
-  }
-}

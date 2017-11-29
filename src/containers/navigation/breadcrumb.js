@@ -4,11 +4,11 @@ import paramCase from 'param-case';
 import { Breadcrumb, BreadcrumbItem } from 'joyent-ui-toolkit';
 
 export default ({ match }) => {
-  const bridge = match && match.params && match.params.bridge;
+  const bridge = match && match.params && match.params.bridgeId;
 
   const links = [
     {
-      name: '/',
+      name: 'Bridges',
       pathname: '/bridges'
     }
   ]

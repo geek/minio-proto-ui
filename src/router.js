@@ -3,10 +3,10 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { PageContainer } from 'joyent-ui-toolkit';
 
-import { Breadcrumb, Menu } from '@containers/navigation';
+import { Breadcrumb } from '@containers/navigation';
 import { Header } from '@components/navigation';
 
-import Bridge from '@containers/bridge';
+import { List as BridgeList, Show as BridgeShow } from '@containers/bridge';
 
 export default () => (
   <BrowserRouter>
@@ -16,16 +16,14 @@ export default () => (
 
       {/* Breadcrumb */}
       <Switch>
-        <Route path="/bridges/~:action/:bridge?" exact component={Breadcrumb} />
-        <Route path="/bridges/:bridge?" component={Breadcrumb} />
+        <Route path="/bridges/:bridgeId?" component={Breadcrumb} />
       </Switch>
 
-      {/* Menu */}
+      {/* Bridges */}
       <Switch>
-        <Route path="/bridges/~:action/:id?" exact component={Menu} />
-        <Route path="/bridges/:bridge?/:section?" component={Menu} />
+        <Route path="/bridges" exact component={BridgeList} />
+        <Route path="/bridges/:bridgeId" exact component={BridgeShow} />
       </Switch>
-
 
       <Route path="/" exact component={() => <Redirect to="/bridges" />} />
     </PageContainer>

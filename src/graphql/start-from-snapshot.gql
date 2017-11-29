@@ -1,5 +1,0 @@
-mutation startInstanceFromSnapshot($id: ID!, $snapshot: ID!) {
-  startMachineFromSnapshot(id: $id, snapshot: $snapshot) {
-    id
-  }
-}

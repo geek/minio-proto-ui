@@ -5,44 +5,20 @@ import remcalc from 'remcalc';
 import {
   Header,
   HeaderBrand,
-  TritonBetaIcon,
-  DataCenterIconLight,
-  UserIconLight,
-  HeaderNav,
+  TritonIcon,
   HeaderAnchor,
-  HeaderItem
 } from 'joyent-ui-toolkit';
 
-const Logo = styled(TritonBetaIcon)`
+const Logo = styled(TritonIcon)`
   padding-top: ${remcalc(11)};
 `;
 
 export default () => (
-  <Header>
+  <Header fluid>
     <HeaderBrand beta>
       <HeaderAnchor to="/">
-        <Logo alt="Triton" />
+        <Logo beta light alt="Triton" />
       </HeaderAnchor>
     </HeaderBrand>
-    <HeaderNav>
-      <li>
-        <HeaderAnchor to="/">Compute</HeaderAnchor>
-      </li>
-    </HeaderNav>
-    <HeaderItem>
-      <HeaderAnchor href="https://my.joyent.com">
-        Return to existing portal
-      </HeaderAnchor>
-    </HeaderItem>
-    <HeaderItem>
-      <HeaderAnchor>
-        <DataCenterIconLight />eu-east-1
-      </HeaderAnchor>
-    </HeaderItem>
-    <HeaderItem>
-      <HeaderAnchor>
-        Nicola
-      </HeaderAnchor>
-    </HeaderItem>
   </Header>
 );

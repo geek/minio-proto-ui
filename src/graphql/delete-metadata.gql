@@ -1,5 +1,0 @@
-mutation deleteMachineMetadata($id: ID!, $name: String!) {
-  deleteMachineMetadata(id: $id, name: $name) {
-    id
-  }
-}

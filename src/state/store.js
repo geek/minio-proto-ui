@@ -4,19 +4,10 @@ import { reducer as formReducer } from 'redux-form';
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import { reducer as valuesReducer } from 'react-redux-values';
 
-import { ui } from './reducers';
 import state from './state';
 
-const GLOBAL =
-  typeof window === 'object'
-    ? window
-    : {
-        location: {
-          hostname: '0.0.0.0'
-        }
-      };
-
-const GQL_URL = process.env.REACT_APP_GQL_URL || `${window.location.origin}/graphql`;
+const GQL_URL =
+  process.env.REACT_APP_GQL_URL || `${window.location.origin}/graphql`;
 export const client = new ApolloClient({
   dataIdFromObject: o => {
     const id = o.id
@@ -42,7 +33,10 @@ export const client = new ApolloClient({
     opts: {
       credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin',
       headers: {
-        'X-CSRF-Token': document.cookie.replace(/(?:(?:^|.*;\s*)crumb\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+        'X-CSRF-Token': document.cookie.replace(
+          /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
+          '$1'
+        )
       }
     }
   })
@@ -53,16 +47,8 @@ export const store = createStore(
     values: valuesReducer,
     apollo: client.reducer(),
     form: formReducer,
-    ui
+    ui: (currState = state.ui) => currState
   }),
   state, // Initial state
-  compose(
-    reduxBatch,
-    applyMiddleware(client.middleware()),
-    // If you are using the devToolsExtension, you can add it here also
-    // eslint-disable-next-line no-negated-condition
-    typeof GLOBAL.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
-      ? GLOBAL.__REDUX_DEVTOOLS_EXTENSION__()
-      : f => f
-  )
+  compose(reduxBatch, applyMiddleware(client.middleware()))
 );
