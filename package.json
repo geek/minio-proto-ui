@@ -17,7 +17,7 @@
     "declarative-redux-form": "^1.0.4",
     "force-array": "^3.1.0",
     "joyent-manifest-editor": "^1.4.0",
-    "joyent-ui-toolkit": "^2.2.1",
+    "joyent-ui-toolkit": "^2.2.2",
     "lodash.find": "^4.6.0",
     "lodash.get": "^4.4.2",
     "lunr": "^2.1.4",
@@ -50,7 +50,10 @@
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.5.1",
-    "joyent-react-scripts": "^3.1.1",
+    "joyent-react-scripts": "^4.0.1",
     "prettier": "^1.8.2"
+  },
+  "resolutions": {
+    "hoist-non-react-statics": "2.3.1"
   }
 }

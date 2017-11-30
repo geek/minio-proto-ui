@@ -6,7 +6,7 @@ import {
   Header,
   HeaderBrand,
   TritonIcon,
-  HeaderAnchor,
+  HeaderAnchor
 } from 'joyent-ui-toolkit';
 
 const Logo = styled(TritonIcon)`

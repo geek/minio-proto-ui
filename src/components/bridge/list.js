@@ -19,7 +19,8 @@ import {
   ArrowIcon
 } from 'joyent-ui-toolkit';
 
-const direction = ({ sortBy, sortOrder, name }) => sortBy === name ? sortOrder === 'asc' ? 'down' : 'up' : 'down';
+const direction = ({ sortBy, sortOrder, name }) =>
+  sortBy === name ? (sortOrder === 'asc' ? 'down' : 'up') : 'down';
 
 export const MenuForm = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit}>
@@ -33,7 +34,7 @@ export const MenuForm = ({ handleSubmit }) => (
       <Col xs={5} sm={7}>
         <FormGroup right>
           <FormLabel>&#8291;</FormLabel>
-          <Button type="submit" small icon fluid>
+          <Button type="submit" to="/bridges/~create" small icon fluid>
             Create Bridge
           </Button>
         </FormGroup>
@@ -42,7 +43,7 @@ export const MenuForm = ({ handleSubmit }) => (
   </form>
 );
 
-export const Item = ({ bridgeId = '', namespace = '', username = '' }) => (
+export const Item = ({ bridgeId = '', name = '', namespace = '' }) => (
   <TableTr>
     <TableTd padding="0" paddingLeft={remcalc(12)} middle left>
       <FormGroup name={bridgeId} paddingTop={remcalc(4)} reduxForm>
@@ -50,10 +51,10 @@ export const Item = ({ bridgeId = '', namespace = '', username = '' }) => (
       </FormGroup>
     </TableTd>
     <TableTd middle left>
-      <Anchor to={`/bridges/${bridgeId}`}>{namespace}</Anchor>
+      <Anchor to={`/bridges/${name}`}>{name}</Anchor>
     </TableTd>
     <TableTd middle left>
-      {username}
+      {namespace}
     </TableTd>
     <TableTd sm="120" middle left>
       <code>{bridgeId.substring(0, 7)}</code>
@@ -72,17 +73,17 @@ export default ({ items = [], sortBy = 'name', sortOrder = 'desc' }) => (
             </FormGroup>
           </TableTh>
           <TableTh left middle actionable>
-            <span>Namespace </span>
+            <span>Name </span>
             <ArrowIcon
               disabled={sortBy !== 'name'}
               direction={direction({ sortBy, sortOrder, name: 'name' })}
             />
           </TableTh>
           <TableTh left middle actionable>
-            <span>Username </span>
+            <span>Namespace </span>
             <ArrowIcon
-              disabled={sortBy !== 'username'}
-              direction={direction({ sortBy, sortOrder, name: 'name' })}
+              disabled={sortBy !== 'namespace'}
+              direction={direction({ sortBy, sortOrder, name: 'namespace' })}
             />
           </TableTh>
           <TableTh sm="120" left middle actionable>

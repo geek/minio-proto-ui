@@ -1,5 +1,6 @@
 [
   {
+    "name": "hello",
     "bridgeId": "acdccb74-8efc-4736-afd8-4d09097b708e",
     "containerId": [
       "dc177b41-7a9b-4e42-bc13-7b2136ebeb7a",
@@ -10,6 +11,7 @@
     "namespace": "/"
   },
   {
+    "name": "world",
     "bridgeId": "7a2a5b62-74b7-4c9e-95a1-93f15e625514",
     "containerId": [
       "d4f00fdc-0189-4153-806e-742fd03c22e6",

@@ -19,10 +19,7 @@ const Show = ({ bridge }) => (
 );
 
 export default compose(
-  connect((state, { match }) => {
-    console.log(match);
-    return {
-      bridge: find(_items, ['bridgeId', get(match, 'params.bridgeId')])
-    }
-  })
+  connect((state, { match }) => ({
+    bridge: find(_items, ['name', get(match, 'params.bridge')])
+  }))
 )(Show);
