@@ -4,7 +4,14 @@ import { compose, graphql } from 'react-apollo';
 import forceArray from 'force-array';
 import remcalc from 'remcalc';
 
-import { Divider, ViewContainer, Message, MessageTitle, MessageDescription, StatusLoader } from 'joyent-ui-toolkit';
+import {
+  Divider,
+  ViewContainer,
+  Message,
+  MessageTitle,
+  MessageDescription,
+  StatusLoader
+} from 'joyent-ui-toolkit';
 
 import {
   default as BridgesListTableForm,
@@ -12,25 +19,40 @@ import {
 } from '@components/bridge/list';
 
 import ListBridges from '@graphql/list-bridges.gql';
-// import Index from '@state/gen-index';
 
 const TABLE_FORM_NAME = 'bridge-list-table';
 const MENU_FORM_NAME = 'bridge-list-menu';
 
-const List = ({ bridges = [], selected = [], sortBy = 'name', sortOrder = 'desc', loading, error, handleAction, toggleSelectAll, handleSortBy }) => {
+const List = ({
+  bridges = [],
+  selected = [],
+  sortBy = 'name',
+  sortOrder = 'desc',
+  loading,
+  error,
+  handleAction,
+  toggleSelectAll,
+  handleSortBy
+}) => {
   const _bridges = forceArray(bridges);
 
-  const _loading = loading && !_bridges.length ? [
-    <Divider key="divider" height={remcalc(30)} transparent />,
-    <StatusLoader key="spinner" />
-  ] : null;
+  const _loading =
+    loading && !_bridges.length
+      ? [
+          <Divider key="divider" height={remcalc(30)} transparent />,
+          <StatusLoader key="spinner" />
+        ]
+      : null;
 
-  const _error = error && !_bridges.length && !_loading ? (
-    <Message error>
-      <MessageTitle>Ooops!</MessageTitle>
-      <MessageDescription>An error occurred while loading your bridges</MessageDescription>
-    </Message>
-  ) : null;
+  const _error =
+    error && !_bridges.length && !_loading ? (
+      <Message error>
+        <MessageTitle>Ooops!</MessageTitle>
+        <MessageDescription>
+          An error occurred while loading your bridges
+        </MessageDescription>
+      </Message>
+    ) : null;
 
   const _table = !_loading ? (
     <ReduxForm

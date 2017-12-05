@@ -10,10 +10,10 @@ import {
   CardOutlet,
   FormLabel,
   FormGroup,
+  FormMeta,
   Input,
   Checkbox,
   Textarea,
-  Select,
   Divider,
   Button,
   DuplicateIcon
@@ -32,6 +32,7 @@ class SshPairForm extends PureComponent {
               <FormGroup name="ssh-public-key" fluid reduxForm>
                 <FormLabel>SSH Public Key</FormLabel>
                 <Textarea fluid />
+                <FormMeta left />
               </FormGroup>
             </Col>
           </Row>,
@@ -40,6 +41,7 @@ class SshPairForm extends PureComponent {
               <FormGroup name="ssh-private-key" fluid reduxForm>
                 <FormLabel>SSH Private Key</FormLabel>
                 <Textarea fluid />
+                <FormMeta left />
               </FormGroup>
             </Col>
           </Row>
@@ -59,17 +61,7 @@ export default ({ handleSubmit }) => (
                 <FormGroup name="name" fluid reduxForm>
                   <FormLabel>Name</FormLabel>
                   <Input fluid />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} md={7}>
-                <FormGroup name="username" fluid reduxForm>
-                  <FormLabel>Username</FormLabel>
-                  <Select fluid>
-                    <option>Wendy</option>
-                    <option>Barry</option>
-                  </Select>
+                  <FormMeta left />
                 </FormGroup>
               </Col>
             </Row>
@@ -77,7 +69,8 @@ export default ({ handleSubmit }) => (
               <Col xs={12} md={7}>
                 <FormGroup name="namespace" fluid reduxForm>
                   <FormLabel>Namespace</FormLabel>
-                  <Input fluid disabled />
+                  <Input fluid />
+                  <FormMeta left />
                 </FormGroup>
               </Col>
             </Row>
@@ -88,6 +81,7 @@ export default ({ handleSubmit }) => (
                 <FormGroup name="access-key" fluid reduxForm>
                   <FormLabel>Access Key</FormLabel>
                   <Input fluid disabled />
+                  <FormMeta left />
                 </FormGroup>
               </Col>
             </Row>
@@ -96,6 +90,7 @@ export default ({ handleSubmit }) => (
                 <FormGroup name="secret-key" fluid reduxForm>
                   <FormLabel>Secret Key</FormLabel>
                   <Input fluid disabled />
+                  <FormMeta />
                 </FormGroup>
               </Col>
             </Row>
