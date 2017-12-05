@@ -4,10 +4,16 @@ import { reducer as formReducer } from 'redux-form';
 import { ApolloClient, createNetworkInterface } from 'react-apollo';
 import { reducer as valuesReducer } from 'react-redux-values';
 
-import state from './state';
+const { REACT_APP_GQL_PORT, REACT_APP_GQL_PROTOCOL, REACT_APP_GQL_HOSTNAME } = process.env;
 
-const GQL_URL =
-  process.env.REACT_APP_GQL_URL || `${window.location.origin}/graphql`;
+const GLOBAL_FALLBACK = { location: { hostname: '0.0.0.0' } };
+const GLOBAL = typeof window === 'object' ? window : GLOBAL_FALLBACK;
+
+const GQL_PORT = REACT_APP_GQL_PORT || 443;
+const GQL_PROTOCOL = REACT_APP_GQL_PROTOCOL || 'https';
+const GQL_HOSTNAME = REACT_APP_GQL_HOSTNAME || GLOBAL.location.hostname;
+const GQL_URL = `${GQL_PROTOCOL}://${GQL_HOSTNAME}:${GQL_PORT}/graphql`
+
 export const client = new ApolloClient({
   dataIdFromObject: o => {
     const id = o.id
@@ -47,8 +53,8 @@ export const store = createStore(
     values: valuesReducer,
     apollo: client.reducer(),
     form: formReducer,
-    ui: (currState = state.ui) => currState
+    ui: (currState = {}) => currState
   }),
-  state, // Initial state
+  {}, // Initial state
   compose(reduxBatch, applyMiddleware(client.middleware()))
 );

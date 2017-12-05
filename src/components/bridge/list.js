@@ -15,12 +15,8 @@ import {
   TableTr,
   TableTh,
   TableTd,
-  TableTbody,
-  ArrowIcon
+  TableTbody
 } from 'joyent-ui-toolkit';
-
-const direction = ({ sortBy, sortOrder, name }) =>
-  sortBy === name ? (sortOrder === 'asc' ? 'down' : 'up') : 'down';
 
 export const MenuForm = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit}>
@@ -74,24 +70,12 @@ export default ({ items = [], sortBy = 'name', sortOrder = 'desc' }) => (
           </TableTh>
           <TableTh left middle actionable>
             <span>Name </span>
-            <ArrowIcon
-              disabled={sortBy !== 'name'}
-              direction={direction({ sortBy, sortOrder, name: 'name' })}
-            />
           </TableTh>
           <TableTh left middle actionable>
             <span>Namespace </span>
-            <ArrowIcon
-              disabled={sortBy !== 'namespace'}
-              direction={direction({ sortBy, sortOrder, name: 'namespace' })}
-            />
           </TableTh>
           <TableTh sm="120" left middle actionable>
             <span>Short ID </span>
-            <ArrowIcon
-              disabled={sortBy !== 'id'}
-              direction={direction({ sortBy, sortOrder, name: 'bridgeId' })}
-            />
           </TableTh>
         </TableTr>
       </TableThead>

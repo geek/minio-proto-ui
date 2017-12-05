@@ -1,0 +1,12 @@
+query bridges {
+  listBridgesByAccount {
+    bridgeId,
+    containerId,
+    accountId,
+    username,
+    sshKeyId,
+    namespace,
+    name,
+    directoryMap
+  }
+}

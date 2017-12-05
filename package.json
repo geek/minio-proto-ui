@@ -4,7 +4,7 @@
   "license": "MPL-2.0",
   "main": "lib",
   "scripts": {
-    "dev": "joyent-react-scripts start",
+    "dev": "REACT_APP_GQL_PORT=8081 PORT=3070 REACT_APP_GQL_PROTOCOL=http joyent-react-scripts start",
     "fmt": " prettier --write --single-quote *.md src/**/*.js src/**/*.gql",
     "build": "NODE_ENV=production joyent-react-scripts build",
     "lint": "eslint . --fix --ext .js --ext .md"
@@ -17,10 +17,10 @@
     "declarative-redux-form": "^1.0.4",
     "force-array": "^3.1.0",
     "joyent-manifest-editor": "^1.4.0",
-    "joyent-ui-toolkit": "^2.2.2",
+    "joyent-ui-toolkit": "^2.5.0",
     "lodash.find": "^4.6.0",
     "lodash.get": "^4.4.2",
-    "lunr": "^2.1.4",
+    "lunr": "^2.1.5",
     "param-case": "^2.1.1",
     "react": "^16.2.0",
     "react-apollo": "^1.4.16",
@@ -36,10 +36,10 @@
     "title-case": "^2.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
+    "babel-eslint": "^8.0.3",
     "babel-plugin-inline-react-svg": "^0.5.2",
     "babel-preset-joyent-portal": "^4.0.4",
-    "eslint": "^4.12.0",
+    "eslint": "^4.12.1",
     "eslint-config-joyent-portal": "^3.2.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-app": "^2.0.1",
@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.5.1",
     "joyent-react-scripts": "^4.0.1",
-    "prettier": "^1.8.2"
+    "prettier": "^1.9.0"
   },
   "resolutions": {
     "hoist-non-react-statics": "2.3.1"
