@@ -51,19 +51,19 @@ export default compose(
         errors['ssh-private-key'] = 'SSH Private Key is required';
       }
 
-      console.log(errors);
-
       // TODO search for existing bridges with the same name
 
       return Promise.resolve(errors);
     },
-    handleCreate: async (variables) => {
+    handleCreate: async variables => {
       const [err, bridge] = await intercept(create({ variables }));
 
       if (err) {
-        return dispatch(stopSubmit(TABLE_FORM_NAME, {
-          _error: parseError(err)
-        }));
+        return dispatch(
+          stopSubmit(TABLE_FORM_NAME, {
+            _error: parseError(err)
+          })
+        );
       }
 
       return history.push(`/bridges/${bridge.name}`);

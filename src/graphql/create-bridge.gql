@@ -1,5 +1,17 @@
-mutation createBridge($namespace: String!, $name: String!, $accessKey: String!, $secretKey: String!, $directoryMap: String!) {
-  createBridge(namespace: $namespace, name: $name, accessKey: $accessKey, secretKey: $secretKey, directoryMap: $directoryMap) {
+mutation createBridge(
+  $namespace: String!
+  $name: String!
+  $accessKey: String!
+  $secretKey: String!
+  $directoryMap: String!
+) {
+  createBridge(
+    namespace: $namespace
+    name: $name
+    accessKey: $accessKey
+    secretKey: $secretKey
+    directoryMap: $directoryMap
+  ) {
     bridgeId
   }
 }
