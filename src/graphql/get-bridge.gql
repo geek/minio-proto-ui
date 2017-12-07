@@ -1,0 +1,12 @@
+query getBridge($name: String!) {
+  bridge(name: $name) {
+    id
+    accountId
+    username
+    sshKeyId
+    namespace
+    name
+    directoryMap
+    status
+  }
+}

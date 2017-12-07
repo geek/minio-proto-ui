@@ -1,7 +1,14 @@
 import React from 'react';
 import ReduxForm from 'declarative-redux-form';
+import { change, startSubmit, stopSubmit, reset } from 'redux-form';
+import { connect } from 'react-redux';
+import { set } from 'react-redux-values';
 import { compose, graphql } from 'react-apollo';
 import forceArray from 'force-array';
+import get from 'lodash.get';
+import sort from 'lodash.sortby';
+import find from 'lodash.find';
+import intercept from 'apr-intercept';
 import remcalc from 'remcalc';
 
 import {
@@ -19,6 +26,11 @@ import {
 } from '@components/bridge/list';
 
 import ListBridges from '@graphql/list-bridges.gql';
+import StopBridge from '@graphql/stop-bridge.gql';
+import ResumeBridge from '@graphql/resume-bridge.gql';
+import RemoveBridge from '@graphql/remove-bridge.gql';
+import Index from '@state/gen-index';
+import parseError from '@state/parse-error';
 
 const TABLE_FORM_NAME = 'bridge-list-table';
 const MENU_FORM_NAME = 'bridge-list-menu';
@@ -26,13 +38,14 @@ const MENU_FORM_NAME = 'bridge-list-menu';
 const List = ({
   bridges = [],
   selected = [],
+  allowedActions = {},
   sortBy = 'name',
   sortOrder = 'desc',
-  loading,
-  error,
-  handleAction,
-  toggleSelectAll,
-  handleSortBy
+  loading = false,
+  error = null,
+  handleToggleSelectAll,
+  handleSortBy,
+  handleAction
 }) => {
   const _bridges = forceArray(bridges);
 
@@ -59,14 +72,13 @@ const List = ({
       form={TABLE_FORM_NAME}
       items={_bridges}
       actionable={selected.length}
+      allowedActions={allowedActions}
       allSelected={_bridges.length && selected.length === _bridges.length}
       sortBy={sortBy}
       sortOrder={sortOrder}
-      toggleSelectAll={toggleSelectAll}
+      onToggleSelectAll={handleToggleSelectAll}
       onSortBy={handleSortBy}
-      onDelete={({ id } = {}) =>
-        handleAction({ name: 'delete', selected: id ? [{ id }] : selected })
-      }
+      onRemove={({ id } = {}) => handleAction({ name: 'remove', selected: id ? [{ id }] : selected })}
     >
       {BridgesListTableForm}
     </ReduxForm>
@@ -86,15 +98,192 @@ const List = ({
 };
 
 export default compose(
+  graphql(StopBridge, { name: 'stop' }),
+  graphql(ResumeBridge, { name: 'resume' }),
+  graphql(RemoveBridge, { name: 'remove' }),
   graphql(ListBridges, {
     options: () => ({
       pollInterval: 1000
     }),
-    props: ({ data: { bridges, loading, error, refetch } }) => ({
+    props: ({
+      data: { bridges = [], loading, error, refetch, ...data }
+    }) => ({
       bridges,
+      index: Index(bridges),
       loading,
       error,
       refetch
     })
-  })
+  }),
+  connect(
+    ({ form, values }, { index, bridges = [], ownProps }) => {
+      // get search value
+      const filter = get(form, `${MENU_FORM_NAME}.values.filter`, false);
+      // check checked items ids
+      const checked = get(form, `${TABLE_FORM_NAME}.values`, {});
+      // get sort values
+      const sortBy = get(values, 'bridge-list-sort-by', 'name');
+      const sortOrder = get(values, 'bridge-list-sort-order', 'asc');
+
+      // if user is searching something, get items that match that query
+      const filtered = filter
+        ? index.search(filter).map(({ ref }) => find(bridges, ['id', ref]))
+        : bridges;
+
+      // from filtered bridges, sort asc
+      const ascSorted = sort(filtered, [sortBy]);
+
+      // if "select-all" is checked, all the bridges are selected
+      // otherwise, map through the checked ids and get the instance value
+      const selected = Object.keys(checked)
+        .filter(id => Boolean(checked[id]))
+        .map(id => find(ascSorted, ['id', id]))
+        .filter(Boolean);
+
+      const allowedActions = {
+        resume: selected.some(({ state }) => state === 'STOPPED'),
+        stop: selected.some(({ state }) => state === 'RUNNING')
+      };
+
+      return {
+        // is sortOrder !== asc, reverse order
+        bridges: sortOrder === 'asc' ? ascSorted : ascSorted.reverse(),
+        allowedActions,
+        selected,
+        index,
+        sortOrder,
+        sortBy
+      };
+    },
+    (dispatch, { refetch, ...ownProps }) => ({
+      handleAction: async ({ selected, name }) => {
+        const action = ownProps[name];
+        const gerund = `${name}ing`;
+
+        // flips submitting flag to true so that we can disable everything
+        const flipSubmitTrue = startSubmit(TABLE_FORM_NAME);
+
+        // sets (removing/stopping/etc) to true so that we can, for instance,
+        // have a spinner on the correct button
+        const setIngTrue = set({
+          name: `bridge-list-${gerund}`,
+          value: true
+        });
+
+        // sets the individual item mutation flags so that we can show a
+        // spinner in the row
+        const setMutatingTrue = selected.map(({ id }) =>
+          set({ name: `${id}-mutating`, value: true })
+        );
+
+        // wait for everything to finish and catch the error
+        const [err] = await intercept(
+          Promise.resolve(
+            dispatch([flipSubmitTrue, setIngTrue, ...setMutatingTrue])
+          ).then(() => {
+            // starts all the mutations for all the selected items
+            return Promise.all(
+              selected.map(({ id }) => action({ variables: { id } }))
+            );
+          })
+        );
+
+        // reverts submitting flag to false and propagates the error if it exists
+        const flipSubmitFalse = stopSubmit(TABLE_FORM_NAME, {
+          _error: err && parseError(err)
+        });
+
+        // if no error, clears selected
+        const clearSelected = !err && reset(TABLE_FORM_NAME);
+
+        // reverts (starting/restarting/etc) to false
+        const setIngFalse = set({
+          name: `bridge-list-${gerund}`,
+          value: false
+        });
+
+        // reverts the individual item mutation flags
+        const setMutatingFalse = selected.map(({ id }) =>
+          set({ name: `${id}-mutating`, value: false })
+        );
+
+        const actions = [
+          flipSubmitFalse,
+          clearSelected,
+          setIngFalse,
+          ...setMutatingFalse
+        ].filter(Boolean);
+
+        // refetch list - even though we poll anyway - after clearing everything
+        return Promise.resolve(dispatch(actions)).then(() => refetch());
+      },
+      handleSortBy: ({ sortBy: currentSortBy, sortOrder }) => newSortBy => {
+        // sort prop is the same, toggle
+        if (currentSortBy === newSortBy) {
+          return dispatch(
+            set({
+              name: `bridge-list-sort-order`,
+              value: sortOrder === 'desc' ? 'asc' : 'desc'
+            })
+          );
+        }
+
+        dispatch([
+          set({
+            name: `bridge-list-sort-order`,
+            value: 'desc'
+          }),
+          set({
+            name: `bridge-list-sort-by`,
+            value: newSortBy
+          })
+        ]);
+      },
+      handleToggleSelectAll: ({ selected = [], bridges = [] }) => () => {
+        const same = selected.length === bridges.length;
+        const hasSelected = selected.length > 0;
+
+        // none are selected, toggle to all
+        if (!hasSelected) {
+          return dispatch(
+            bridges.map(({ id }) =>
+              change(TABLE_FORM_NAME, id, true)
+            )
+          );
+        }
+
+        // all are selected, toggle to none
+        if (hasSelected && same) {
+          return dispatch(
+            bridges.map(({ id }) =>
+              change(TABLE_FORM_NAME, id, false)
+            )
+          );
+        }
+
+        // some are selected, toggle to all
+        if (hasSelected && !same) {
+          return dispatch(
+            bridges.map(({ id }) =>
+              change(TABLE_FORM_NAME, id, true)
+            )
+          );
+        }
+      }
+    }),
+    (stateProps, dispatchProps, ownProps) => {
+      const { selected, bridges, sortBy, sortOrder } = stateProps;
+      const { handleToggleSelectAll, handleSortBy } = dispatchProps;
+
+      return {
+        ...ownProps,
+        ...stateProps,
+        selected,
+        bridges,
+        ...dispatchProps,
+        handleToggleSelectAll: handleToggleSelectAll({ selected, bridges }),
+        handleSortBy: handleSortBy({ sortBy, sortOrder })
+      };
+    }
+  )
 )(List);

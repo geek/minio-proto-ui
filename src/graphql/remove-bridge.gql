@@ -1,0 +1,3 @@
+mutation removeBridge($id: ID!) {
+  deleteBridge(id: $id)
+}

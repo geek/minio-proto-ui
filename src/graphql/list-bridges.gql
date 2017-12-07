@@ -1,12 +1,7 @@
 query bridges {
-  listBridgesByAccount {
-    bridgeId
-    containerId
-    accountId
-    username
-    sshKeyId
-    namespace
+  bridges {
+    id
     name
-    directoryMap
+    status
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { stopSubmit } from 'redux-form';
+import { SubmissionError } from 'redux-form';
 import ReduxForm from 'declarative-redux-form';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -21,7 +21,7 @@ const Create = ({ shouldAsyncValidate, handleValidate, handleCreate }) => (
       shouldAsyncValidate={shouldAsyncValidate}
       asyncValidate={handleValidate}
       onSubmit={handleCreate}
-      initialValues={{ 'auto-ssh': true }}
+      initialValues={{ 'directory-map': '*:/stor/*' }}
     >
       {BridgeCreateForm}
     </ReduxForm>
@@ -32,41 +32,36 @@ export default compose(
   graphql(CreatBridge, { name: 'create' }),
   connect(null, (dispatch, { history, create }) => ({
     shouldAsyncValidate: ({ trigger }) => trigger === 'submit',
-    handleValidate: ({ name, namespace, ...values }) => {
+    handleValidate: ({ name, ...values }) => {
       const errors = {};
 
       if (!name) {
         errors.name = 'Name is required';
       }
 
-      if (!namespace) {
-        errors.namespace = 'Namespace is required';
-      }
-
-      if (!values['auto-ssh'] && !values['ssh-public-key']) {
-        errors['ssh-public-key'] = 'SSH Public Key is required';
-      }
-
-      if (!values['auto-ssh'] && !values['ssh-private-key']) {
-        errors['ssh-private-key'] = 'SSH Private Key is required';
-      }
-
-      // TODO search for existing bridges with the same name
-
       return Promise.resolve(errors);
     },
     handleCreate: async variables => {
-      const [err, bridge] = await intercept(create({ variables }));
+      const [err, bridge] = await intercept(
+        create({
+          variables: {
+            ...variables,
+            directoryMap: variables['directory-map'] || ''
+          }
+        })
+      );
 
       if (err) {
-        return dispatch(
-          stopSubmit(TABLE_FORM_NAME, {
-            _error: parseError(err)
-          })
-        );
+        throw new SubmissionError({
+          _error: parseError(err)
+        });
       }
 
-      return history.push(`/bridges/${bridge.name}`);
+      const { data } = bridge;
+      const { createBridge } = data;
+      const { name } = createBridge;
+
+      return history.push(`/bridges/${name}`);
     }
   }))
 )(Create);

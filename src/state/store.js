@@ -39,16 +39,16 @@ export const client = new ApolloClient({
     return `${o.__typename}:${id}`;
   },
   networkInterface: createNetworkInterface({
-    uri: GQL_URL,
-    opts: {
-      credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin',
-      headers: {
-        'X-CSRF-Token': document.cookie.replace(
-          /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
-          '$1'
-        )
-      }
-    }
+    uri: GQL_URL
+    // opts: {
+    //   credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin',
+    //   headers: {
+    //     'X-CSRF-Token': document.cookie.replace(
+    //       /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
+    //       '$1'
+    //     )
+    //   }
+    // }
   })
 });
 
@@ -60,5 +60,9 @@ export const store = createStore(
     ui: (currState = {}) => currState
   }),
   {}, // Initial state
-  compose(reduxBatch, applyMiddleware(client.middleware()))
+  compose(
+    reduxBatch,
+    applyMiddleware(client.middleware()),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
 );

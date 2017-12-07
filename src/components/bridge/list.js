@@ -1,4 +1,7 @@
 import React from 'react';
+import { withTheme } from 'styled-components';
+import Value from 'react-redux-values';
+import titleCase from 'title-case';
 import remcalc from 'remcalc';
 
 import {
@@ -15,8 +18,30 @@ import {
   TableTr,
   TableTh,
   TableTd,
-  TableTbody
+  TableTbody,
+  StatusLoader,
+  DotIcon,
+  PopoverContainer,
+  PopoverTarget,
+  ActionsIcon,
+  Popover,
+  PopoverItem,
+  Message,
+  MessageTitle,
+  MessageDescription,
+  QueryBreakpoints,
+  Footer,
+  StartIcon,
+  StopIcon,
+  DeleteIcon
 } from 'joyent-ui-toolkit';
+
+const { SmallOnly, Medium } = QueryBreakpoints;
+
+const stateColor = {
+  RUNNING: 'green',
+  STOPPED: 'grey'
+};
 
 export const MenuForm = ({ handleSubmit }) => (
   <form onSubmit={handleSubmit}>
@@ -39,10 +64,112 @@ export const MenuForm = ({ handleSubmit }) => (
   </form>
 );
 
-export const Item = ({ bridgeId = '', name = '', namespace = '' }) => (
+export const Actions = withTheme(
+  ({
+    submitting = false,
+    allowedActions = {},
+    onResume = () => null,
+    onStop = () => null,
+    onRemove = () => null,
+    theme
+  }) => (
+    <Footer fixed bottom>
+      <Row between="xs" middle="xs">
+        <Col xs={7}>
+          <SmallOnly>
+            <Button
+              type="button"
+              disabled={!allowedActions.resume}
+              onClick={onResume}
+              secondary
+              small
+              icon
+            >
+              <StartIcon disabled={!allowedActions.resume} />
+            </Button>
+          </SmallOnly>
+          <Medium>
+            <Button
+              type="button"
+              disabled={!allowedActions.resume}
+              onClick={onResume}
+              secondary
+              icon
+            >
+              <StartIcon disabled={!allowedActions.resume} />
+              <span>Resume</span>
+            </Button>
+          </Medium>
+          <SmallOnly>
+            <Button
+              type="button"
+              disabled={!allowedActions.stop}
+              onClick={onStop}
+              secondary
+              small
+              icon
+            >
+              <StopIcon disabled={!allowedActions.stop} />
+            </Button>
+          </SmallOnly>
+          <Medium>
+            <Button
+              type="button"
+              disabled={!allowedActions.stop}
+              onClick={onStop}
+              secondary
+              icon
+            >
+              <StopIcon disabled={!allowedActions.stop} />
+              <span>Stop</span>
+            </Button>
+          </Medium>
+        </Col>
+        <Col xs={5}>
+          <Value name="bridge-list-removeing">
+            {({ value: removing }) => [
+              <SmallOnly key="small-only">
+                <Button
+                  type="button"
+                  onClick={onRemove}
+                  disabled={submitting}
+                  loading={submitting && removing}
+                  error
+                  secondary
+                  right
+                  small
+                  icon
+                >
+                  <DeleteIcon disabled={submitting} />
+                </Button>
+              </SmallOnly>,
+              <Medium key="medium">
+                <Button
+                  type="button"
+                  onClick={onRemove}
+                  disabled={submitting}
+                  loading={submitting && removing}
+                  error
+                  secondary
+                  right
+                  icon
+                >
+                  <DeleteIcon disabled={submitting} fill={theme.red} />
+                  <span>Delete</span>
+                </Button>
+              </Medium>
+            ]}
+          </Value>
+        </Col>
+      </Row>
+    </Footer>
+  )
+);
+
+export const Item = ({ id = '', name = '', status = '' }) => (
   <TableTr>
     <TableTd padding="0" paddingLeft={remcalc(12)} middle left>
-      <FormGroup name={bridgeId} paddingTop={remcalc(4)} reduxForm>
+      <FormGroup name={id} paddingTop={remcalc(4)} reduxForm>
         <Checkbox />
       </FormGroup>
     </TableTd>
@@ -50,38 +177,133 @@ export const Item = ({ bridgeId = '', name = '', namespace = '' }) => (
       <Anchor to={`/bridges/${name}`}>{name}</Anchor>
     </TableTd>
     <TableTd middle left>
-      {namespace}
+      <Value name={`${id}-mutating`}>
+        {({ value: mutating }) =>
+          mutating ? (
+            <StatusLoader small />
+          ) : stateColor[status] ? (
+            <span>
+              <DotIcon
+                width={remcalc(11)}
+                height={remcalc(11)}
+                borderRadius={remcalc(11)}
+                color={stateColor[status]}
+              />{' '}
+              {titleCase(status)}
+            </span>
+          ) : (
+            <StatusLoader small />
+          )
+        }
+      </Value>
     </TableTd>
-    <TableTd sm="120" middle left>
-      <code>{bridgeId.substring(0, 7)}</code>
+    <TableTd xs="0" sm="130" middle left>
+      <code>{id.substring(0, 7)}</code>
     </TableTd>
+    {['RUNNING', 'STOPPED'].indexOf(status) >= 0 ? (
+      <PopoverContainer clickable>
+        <TableTd padding="0" hasBorder="left">
+          <PopoverTarget box>
+            <ActionsIcon />
+          </PopoverTarget>
+          <Popover placement="right">
+            <PopoverItem disabled={status !== 'STOPPED'}>Resume</PopoverItem>
+            <PopoverItem disabled={status !== 'RUNNING'}>Stop</PopoverItem>
+          </Popover>
+        </TableTd>
+      </PopoverContainer>
+    ) : (
+      <TableTd padding="0" hasBorder="left" center middle>
+        <ActionsIcon disabled />
+      </TableTd>
+    )}
   </TableTr>
 );
 
-export default ({ items = [], sortBy = 'name', sortOrder = 'desc' }) => (
+export default ({
+  items = [],
+  sortBy = 'name',
+  sortOrder = 'desc',
+  error = null,
+  allowedActions = {},
+  allSelected = false,
+  submitting = false,
+  actionable = false,
+  onToggleSelectAll = () => null,
+  onSortBy = () => null,
+  onResume = () => null,
+  onStop = () => null,
+  onRemove = () => null
+}) => (
   <form>
+    {error ? (
+      <Message error>
+        <MessageTitle>Ooops!</MessageTitle>
+        <MessageDescription>{error}</MessageDescription>
+      </Message>
+    ) : null}
     <Table>
       <TableThead>
         <TableTr>
           <TableTh xs="32" padding="0" paddingLeft={remcalc(12)} middle left>
             <FormGroup paddingTop={remcalc(4)}>
-              <Checkbox />
+              <Checkbox
+                checked={allSelected}
+                disabled={submitting}
+                onChange={onToggleSelectAll}
+              />
             </FormGroup>
           </TableTh>
-          <TableTh left middle actionable>
+          <TableTh
+            onClick={() => onSortBy('name')}
+            sortOrder={sortOrder}
+            showSort={sortBy === 'name'}
+            left
+            middle
+            actionable
+          >
             <span>Name </span>
           </TableTh>
-          <TableTh left middle actionable>
-            <span>Namespace </span>
+          <TableTh
+            xs="150"
+            onClick={() => onSortBy('status')}
+            sortOrder={sortOrder}
+            showSort={sortBy === 'status'}
+            left
+            middle
+            actionable
+          >
+            <span>Status </span>
           </TableTh>
-          <TableTh sm="120" left middle actionable>
+          <TableTh
+            xs="0"
+            sm="130"
+            onClick={() => onSortBy('id')}
+            sortOrder={sortOrder}
+            showSort={sortBy === 'id'}
+            left
+            middle
+            actionable
+          >
             <span>Short ID </span>
           </TableTh>
+          <TableTh xs="60" padding="0" />
         </TableTr>
       </TableThead>
       <TableTbody>
-        {items.map(({ id, ...rest }) => <Item key={id} id={id} {...rest} />)}
+        {items.map(({ id, ...rest }) => (
+          <Item key={id} id={id} {...rest} />
+        ))}
       </TableTbody>
     </Table>
+    {actionable ? (
+      <Actions
+        allowedActions={allowedActions}
+        submitting={submitting}
+        onResume={onResume}
+        onStop={onStop}
+        onRemove={onRemove}
+      />
+    ) : null}
   </form>
 );

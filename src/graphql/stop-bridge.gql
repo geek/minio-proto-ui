@@ -1,0 +1,3 @@
+mutation stopBridge($id: ID!) {
+  stopBridge(id: $id)
+}

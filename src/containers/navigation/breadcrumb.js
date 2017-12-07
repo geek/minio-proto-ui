@@ -13,7 +13,7 @@ export default ({ match }) => {
     .concat(
       bridge && [
         {
-          name: paramCase(bridge.substring(0, 7)),
+          name: paramCase(bridge),
           pathname: `/bridges/${bridge}`
         }
       ]
