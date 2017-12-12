@@ -31,7 +31,22 @@ const stateColor = {
 };
 
 export default withTheme(
-  ({ id, name, namespace, username, directoryMap, status, theme }) => (
+  ({
+    id,
+    name,
+    namespace,
+    username,
+    directoryMap,
+    status,
+    resuming,
+    stopping,
+    removing,
+    onResume,
+    onStop,
+    onRemove,
+    submitting,
+    theme
+  }) => (
     <Row>
       <Col xs={12} sm={12} md={9}>
         <Card>
@@ -60,8 +75,10 @@ export default withTheme(
               <Col xs={9}>
                 <SmallOnly>
                   <Button
+                    type="button"
                     disabled={status !== 'STOPPED'}
-                    loading={status === 'STARTING'}
+                    loading={resuming}
+                    onClick={onResume}
                     secondary
                     bold
                     small
@@ -72,8 +89,10 @@ export default withTheme(
                 </SmallOnly>
                 <Medium>
                   <Button
+                    type="button"
                     disabled={status !== 'STOPPED'}
-                    loading={status === 'STARTING'}
+                    loading={resuming}
+                    onClick={onResume}
                     secondary
                     bold
                     icon
@@ -86,7 +105,8 @@ export default withTheme(
                   <Button
                     type="button"
                     disabled={status !== 'RUNNING'}
-                    loading={status === 'STOPPING'}
+                    loading={stopping}
+                    onClick={onStop}
                     secondary
                     bold
                     small
@@ -97,8 +117,10 @@ export default withTheme(
                 </SmallOnly>
                 <Medium>
                   <Button
+                    type="button"
                     disabled={status !== 'RUNNING'}
-                    loading={status === 'STOPPING'}
+                    loading={stopping}
+                    onClick={onStop}
                     secondary
                     bold
                     icon
@@ -111,7 +133,9 @@ export default withTheme(
               <Col xs={3}>
                 <SmallOnly>
                   <Button
-                    loading={status === 'REMOVING'}
+                    type="button"
+                    loading={removing}
+                    onClick={onRemove}
                     error
                     bold
                     icon
@@ -122,8 +146,20 @@ export default withTheme(
                   </Button>
                 </SmallOnly>
                 <Medium>
-                  <Button loading={status === 'REMOVING'} error bold icon right>
-                    <DeleteIcon fill={theme.red} />
+                  <Button
+                    type="button"
+                    disabled={stopping || resuming}
+                    loading={removing}
+                    onClick={onRemove}
+                    error
+                    bold
+                    icon
+                    right
+                  >
+                    <DeleteIcon
+                      disabled={stopping || resuming}
+                      fill={stopping || resuming ? undefined : theme.red}
+                    />
                     <span>Delete</span>
                   </Button>
                 </Medium>

@@ -5,8 +5,8 @@
   "main": "lib",
   "scripts": {
     "dev": "REACT_APP_GQL_PORT=8081 PORT=3070 REACT_APP_GQL_PROTOCOL=http joyent-react-scripts start",
-    "fmt": " prettier --write --single-quote *.md src/**/*.js src/**/*.gql",
-    "build": "NODE_ENV=production joyent-react-scripts build",
+    "fmt": "prettier --write --single-quote *.md src/**/*.js src/**/*.gql",
+    "build": "REACT_APP_GQL_PORT=8081 PORT=3070 REACT_APP_GQL_PROTOCOL=http NODE_ENV=production joyent-react-scripts build",
     "lint": "eslint . --fix --ext .js --ext .md"
   },
   "dependencies": {
@@ -57,6 +57,7 @@
   "resolutions": {
     "react": "16.2.0",
     "breeze-nexttick": "0.1.0",
-    "hoist-non-react-statics": "2.3.1"
+    "hoist-non-react-statics": "2.3.1",
+    "webpack-sources": "1.0.1"
   }
 }

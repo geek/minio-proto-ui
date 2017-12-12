@@ -78,7 +78,15 @@ const List = ({
       sortOrder={sortOrder}
       onToggleSelectAll={handleToggleSelectAll}
       onSortBy={handleSortBy}
-      onRemove={({ id } = {}) => handleAction({ name: 'remove', selected: id ? [{ id }] : selected })}
+      onRemove={({ id } = {}) =>
+        handleAction({ name: 'remove', selected: id ? [{ id }] : selected })
+      }
+      onStop={({ id } = {}) =>
+        handleAction({ name: 'stop', selected: id ? [{ id }] : selected })
+      }
+      onResume={({ id } = {}) =>
+        handleAction({ name: 'resume', selected: id ? [{ id }] : selected })
+      }
     >
       {BridgesListTableForm}
     </ReduxForm>
@@ -105,9 +113,7 @@ export default compose(
     options: () => ({
       pollInterval: 1000
     }),
-    props: ({
-      data: { bridges = [], loading, error, refetch, ...data }
-    }) => ({
+    props: ({ data: { bridges = [], loading, error, refetch, ...data } }) => ({
       bridges,
       index: Index(bridges),
       loading,
@@ -141,8 +147,8 @@ export default compose(
         .filter(Boolean);
 
       const allowedActions = {
-        resume: selected.some(({ state }) => state === 'STOPPED'),
-        stop: selected.some(({ state }) => state === 'RUNNING')
+        resume: selected.some(({ status }) => status === 'STOPPED'),
+        stop: selected.some(({ status }) => status === 'RUNNING')
       };
 
       return {
@@ -214,8 +220,11 @@ export default compose(
           ...setMutatingFalse
         ].filter(Boolean);
 
-        // refetch list - even though we poll anyway - after clearing everything
-        return Promise.resolve(dispatch(actions)).then(() => refetch());
+        // before dispatching the actions and updating all the flags,
+        // refresh to attempt to not see the previous status while it transitions
+        await refetch();
+
+        return Promise.resolve(dispatch(actions));
       },
       handleSortBy: ({ sortBy: currentSortBy, sortOrder }) => newSortBy => {
         // sort prop is the same, toggle
@@ -246,27 +255,21 @@ export default compose(
         // none are selected, toggle to all
         if (!hasSelected) {
           return dispatch(
-            bridges.map(({ id }) =>
-              change(TABLE_FORM_NAME, id, true)
-            )
+            bridges.map(({ id }) => change(TABLE_FORM_NAME, id, true))
           );
         }
 
         // all are selected, toggle to none
         if (hasSelected && same) {
           return dispatch(
-            bridges.map(({ id }) =>
-              change(TABLE_FORM_NAME, id, false)
-            )
+            bridges.map(({ id }) => change(TABLE_FORM_NAME, id, false))
           );
         }
 
         // some are selected, toggle to all
         if (hasSelected && !same) {
           return dispatch(
-            bridges.map(({ id }) =>
-              change(TABLE_FORM_NAME, id, true)
-            )
+            bridges.map(({ id }) => change(TABLE_FORM_NAME, id, true))
           );
         }
       }

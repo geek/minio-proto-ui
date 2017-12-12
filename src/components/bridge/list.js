@@ -76,54 +76,64 @@ export const Actions = withTheme(
     <Footer fixed bottom>
       <Row between="xs" middle="xs">
         <Col xs={7}>
-          <SmallOnly>
-            <Button
-              type="button"
-              disabled={!allowedActions.resume}
-              onClick={onResume}
-              secondary
-              small
-              icon
-            >
-              <StartIcon disabled={!allowedActions.resume} />
-            </Button>
-          </SmallOnly>
-          <Medium>
-            <Button
-              type="button"
-              disabled={!allowedActions.resume}
-              onClick={onResume}
-              secondary
-              icon
-            >
-              <StartIcon disabled={!allowedActions.resume} />
-              <span>Resume</span>
-            </Button>
-          </Medium>
-          <SmallOnly>
-            <Button
-              type="button"
-              disabled={!allowedActions.stop}
-              onClick={onStop}
-              secondary
-              small
-              icon
-            >
-              <StopIcon disabled={!allowedActions.stop} />
-            </Button>
-          </SmallOnly>
-          <Medium>
-            <Button
-              type="button"
-              disabled={!allowedActions.stop}
-              onClick={onStop}
-              secondary
-              icon
-            >
-              <StopIcon disabled={!allowedActions.stop} />
-              <span>Stop</span>
-            </Button>
-          </Medium>
+          <Value name="bridge-list-resumeing">
+            {({ value: stoping }) => [
+              <SmallOnly>
+                <Button
+                  type="button"
+                  disabled={!allowedActions.resume}
+                  onClick={onResume}
+                  secondary
+                  small
+                  icon
+                >
+                  <StartIcon disabled={!allowedActions.resume} />
+                </Button>
+              </SmallOnly>,
+              <Medium>
+                <Button
+                  type="button"
+                  disabled={!allowedActions.resume}
+                  onClick={onResume}
+                  secondary
+                  icon
+                >
+                  <StartIcon disabled={!allowedActions.resume} />
+                  <span>Resume</span>
+                </Button>
+              </Medium>
+            ]}
+          </Value>
+          <Value name="bridge-list-stoping">
+            {({ value: stoping }) => [
+              <SmallOnly>
+                <Button
+                  type="button"
+                  disabled={!allowedActions.stop}
+                  loading={submitting && stoping}
+                  onClick={onStop}
+                  secondary
+                  small
+                  icon
+                >
+                  <StopIcon disabled={!allowedActions.stop} />
+                </Button>
+              </SmallOnly>,
+              <Medium>
+                <Button
+                  type="button"
+                  disabled={!allowedActions.stop}
+                  loading={submitting && stoping}
+                  onClick={onStop}
+                  secondary
+                  icon
+                >
+                  <StopIcon disabled={!allowedActions.stop} />
+                  <span>Stop</span>
+                </Button>
+              </Medium>
+            ]}
+          </Value>
         </Col>
         <Col xs={5}>
           <Value name="bridge-list-removeing">
@@ -140,7 +150,7 @@ export const Actions = withTheme(
                   small
                   icon
                 >
-                  <DeleteIcon disabled={submitting} />
+                  <DeleteIcon disabled={submitting} fill={theme.red} />
                 </Button>
               </SmallOnly>,
               <Medium key="medium">
@@ -166,7 +176,7 @@ export const Actions = withTheme(
   )
 );
 
-export const Item = ({ id = '', name = '', status = '' }) => (
+export const Item = ({ id = '', name = '', status = '', onStop, onResume }) => (
   <TableTr>
     <TableTd padding="0" paddingLeft={remcalc(12)} middle left>
       <FormGroup name={id} paddingTop={remcalc(4)} reduxForm>
@@ -207,8 +217,12 @@ export const Item = ({ id = '', name = '', status = '' }) => (
             <ActionsIcon />
           </PopoverTarget>
           <Popover placement="right">
-            <PopoverItem disabled={status !== 'STOPPED'}>Resume</PopoverItem>
-            <PopoverItem disabled={status !== 'RUNNING'}>Stop</PopoverItem>
+            <PopoverItem onClick={onResume} disabled={status !== 'STOPPED'}>
+              Resume
+            </PopoverItem>
+            <PopoverItem onClick={onStop} disabled={status !== 'RUNNING'}>
+              Stop
+            </PopoverItem>
           </Popover>
         </TableTd>
       </PopoverContainer>
@@ -292,7 +306,13 @@ export default ({
       </TableThead>
       <TableTbody>
         {items.map(({ id, ...rest }) => (
-          <Item key={id} id={id} {...rest} />
+          <Item
+            key={id}
+            id={id}
+            {...rest}
+            onStop={() => onStop({ id })}
+            onResume={() => onResume({ id })}
+          />
         ))}
       </TableTbody>
     </Table>
