@@ -39,7 +39,7 @@ export const client = new ApolloClient({
     return `${o.__typename}:${id}`;
   },
   networkInterface: createNetworkInterface({
-    uri: GQL_URL,
+    uri: 'http://localhost:8080/graphql',
     opts: {
       credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin'
     //   headers: {

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withTheme } from 'styled-components';
 import { Margin } from 'styled-components-spacing';
 import remcalc from 'remcalc';
 import titleCase from 'title-case';
-
+import copy from 'clipboard-copy';
+import styled from 'styled-components';
 import {
   Row,
   Col,
@@ -18,7 +19,11 @@ import {
   DeleteIcon,
   StopIcon,
   StartIcon,
-  DotIcon
+  DotIcon,
+  ClipboardIcon,
+  TooltipContainer,
+  TooltipTarget,
+  Tooltip
 } from 'joyent-ui-toolkit';
 
 const { SmallOnly, Medium } = QueryBreakpoints;
@@ -29,6 +34,69 @@ const stateColor = {
   STOPPING: 'grey',
   STOPPED: 'grey'
 };
+
+const InputIconWrapper = styled.div`
+  display: flex;
+  margin-bottom: ${remcalc(10)};
+  flex-direction: column;
+  align-items: flex-end;
+
+  input {
+    padding-right: ${remcalc(30)};
+  }
+
+  div {
+    top: ${remcalc(-41)};
+    position: relative;
+    right: ${remcalc(12)};
+    max-width: 150px;
+    text-align: center;
+  }
+`;
+
+const ClipboardIconActionable = styled(ClipboardIcon)`
+  cursor: pointer;
+`;
+
+class CopyToClipboardTooltip extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      copied: false
+    };
+  }
+
+  handleClick = () => {
+    const { children: text } = this.props;
+
+    copy(text);
+
+    this.setState(
+      {
+        copied: true
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({
+            copied: false
+          });
+        }, 4000);
+      }
+    );
+  };
+
+  render = () => (
+    <TooltipContainer hoverable>
+      <TooltipTarget>
+        <ClipboardIconActionable onClick={this.handleClick} />
+      </TooltipTarget>
+      <Tooltip placement="top" success={Boolean(this.state.copied)}>
+        {this.state.copied ? 'Copied To Clipboard' : 'Copy To Clipboard'}
+      </Tooltip>
+    </TooltipContainer>
+  );
+}
 
 export default withTheme(
   ({
@@ -180,7 +248,10 @@ export default withTheme(
             <Row>
               <Col xs={12} md={7}>
                 <FormLabel>Secret Key</FormLabel>
-                <Input readonly value={sshKeyId} fluid />
+                <InputIconWrapper>
+                  <Input readonly value={sshKeyId} fluid />
+                  <CopyToClipboardTooltip>{sshKeyId}</CopyToClipboardTooltip>
+                </InputIconWrapper>
               </Col>
             </Row>
             <Row>
