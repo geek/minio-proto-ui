@@ -41,9 +41,9 @@ import {
 } from 'joyent-ui-toolkit';
 
 const Wrapper = styled(Padding)`
-  max-Width: 50%;
+  max-width: 50%;
   margin: auto;
-  text-align: center
+  text-align: center;
 `;
 
 const { SmallOnly, Medium } = QueryBreakpoints;
@@ -186,7 +186,14 @@ export const Actions = withTheme(
   )
 );
 
-export const Item = ({ id = '', name = '', status = '', onStop, onResume }) => (
+export const Item = ({
+  id = '',
+  name = '',
+  status = '',
+  directoryMap = '',
+  onStop,
+  onResume
+}) => (
   <TableTr>
     <TableTd padding="0" paddingLeft={remcalc(12)} middle left>
       <FormGroup name={id} paddingTop={remcalc(4)} reduxForm>
@@ -195,6 +202,9 @@ export const Item = ({ id = '', name = '', status = '', onStop, onResume }) => (
     </TableTd>
     <TableTd middle left>
       <Anchor to={`/bridges/${name}`}>{name}</Anchor>
+    </TableTd>
+    <TableTd middle left>
+      <code>{directoryMap.substring(0, 7)}</code>
     </TableTd>
     <TableTd middle left>
       <Value name={`${id}-mutating`}>
@@ -216,9 +226,6 @@ export const Item = ({ id = '', name = '', status = '', onStop, onResume }) => (
           )
         }
       </Value>
-    </TableTd>
-    <TableTd xs="0" sm="130" middle left>
-      <code>{id.substring(0, 7)}</code>
     </TableTd>
     {['RUNNING', 'STOPPED'].indexOf(status) >= 0 ? (
       <PopoverContainer clickable>
@@ -244,6 +251,33 @@ export const Item = ({ id = '', name = '', status = '', onStop, onResume }) => (
   </TableTr>
 );
 
+const NotFound = ({ filtering = false }) => (
+  <Row middle="xs">
+    <Col xs="12">
+      <Card>
+        <Wrapper top={filtering ? 2 : 5}>
+          <H3>
+            {filtering ? 'No bridges found for filter :/' : 'No bridges yet?'}
+          </H3>
+          {!filtering ? (
+            <P>
+              You haven’t commissioned any bridges yet, but they’re really easy
+              to set up. Click below to get going.
+            </P>
+          ) : null}
+          {!filtering ? (
+            <Margin top={2}>
+              <Button type="submit" to="/bridges/~create">
+                Create Bridge
+              </Button>
+            </Margin>
+          ) : null}
+        </Wrapper>
+      </Card>
+    </Col>
+  </Row>
+);
+
 export default ({
   items = [],
   sortBy = 'name',
@@ -253,6 +287,7 @@ export default ({
   allSelected = false,
   submitting = false,
   actionable = false,
+  filtering = false,
   onToggleSelectAll = () => null,
   onSortBy = () => null,
   onResume = () => null,
@@ -268,87 +303,70 @@ export default ({
         </Message>
       </Margin>
     ) : null}
-    <Table>
-      <TableThead>
-        <TableTr>
-          <TableTh xs="32" padding="0" paddingLeft={remcalc(12)} middle left>
-            <FormGroup paddingTop={remcalc(4)}>
-              <Checkbox
-                checked={allSelected}
-                disabled={submitting}
-                onChange={onToggleSelectAll}
+    {(items.length > 0 || filtering) && (
+      <Table>
+        <TableThead>
+          <TableTr>
+            <TableTh xs="32" padding="0" paddingLeft={remcalc(12)} middle left>
+              <FormGroup paddingTop={remcalc(4)}>
+                <Checkbox
+                  checked={allSelected}
+                  disabled={submitting}
+                  onChange={onToggleSelectAll}
+                />
+              </FormGroup>
+            </TableTh>
+            <TableTh
+              onClick={() => onSortBy('name')}
+              sortOrder={sortOrder}
+              showSort={sortBy === 'name'}
+              left
+              middle
+              actionable
+            >
+              <span>Name </span>
+            </TableTh>
+            <TableTh
+              xs="0"
+              sm="130"
+              onClick={() => onSortBy('directoryMap')}
+              sortOrder={sortOrder}
+              showSort={sortBy === 'directoryMap'}
+              left
+              middle
+              actionable
+            >
+              <span>Directory</span>
+            </TableTh>
+            <TableTh
+              xs="150"
+              onClick={() => onSortBy('status')}
+              sortOrder={sortOrder}
+              showSort={sortBy === 'status'}
+              left
+              middle
+              actionable
+            >
+              <span>Status </span>
+            </TableTh>
+            <TableTh xs="60" padding="0" />
+          </TableTr>
+        </TableThead>
+        <TableTbody>
+          {(items.length > 0 || filtering) &&
+            items.map(({ id, ...rest }) => (
+              <Item
+                key={id}
+                id={id}
+                {...rest}
+                onStop={() => onStop({ id })}
+                onResume={() => onResume({ id })}
               />
-            </FormGroup>
-          </TableTh>
-          <TableTh
-            onClick={() => onSortBy('name')}
-            sortOrder={sortOrder}
-            showSort={sortBy === 'name'}
-            left
-            middle
-            actionable
-          >
-            <span>Name </span>
-          </TableTh>
-          <TableTh
-            xs="150"
-            onClick={() => onSortBy('status')}
-            sortOrder={sortOrder}
-            showSort={sortBy === 'status'}
-            left
-            middle
-            actionable
-          >
-            <span>Status </span>
-          </TableTh>
-          <TableTh
-            xs="0"
-            sm="130"
-            onClick={() => onSortBy('id')}
-            sortOrder={sortOrder}
-            showSort={sortBy === 'id'}
-            left
-            middle
-            actionable
-          >
-            <span>Short ID </span>
-          </TableTh>
-          <TableTh xs="60" padding="0" />
-        </TableTr>
-      </TableThead>
-      <TableTbody>
-        {items.length > 0 &&
-          items.map(({ id, ...rest }) => (
-            <Item
-              key={id}
-              id={id}
-              {...rest}
-              onStop={() => onStop({ id })}
-              onResume={() => onResume({ id })}
-            />
-          ))}
-      </TableTbody>
-    </Table>
-    {items.length === 0 && (
-      <Row middle="xs">
-        <Col xs="12">
-          <Card>
-            <Wrapper top={5}>
-              <H3>No bridges yet?</H3>
-              <P>
-                You haven’t commissioned any bridges yet, but they’re really
-                easy to set up. Click below to get going.
-              </P>
-              <Margin top={2}>
-                <Button type="submit" to="/bridges/~create">
-                  Create Bridge
-                </Button>
-              </Margin>
-            </Wrapper>
-          </Card>
-        </Col>
-      </Row>
+            ))}
+        </TableTbody>
+      </Table>
     )}
+    {!items.length ? <NotFound filtering={filtering} /> : null}
     {actionable ? (
       <Actions
         allowedActions={allowedActions}

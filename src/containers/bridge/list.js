@@ -43,6 +43,7 @@ const List = ({
   sortOrder = 'desc',
   loading = false,
   error = null,
+  filtering = false,
   handleToggleSelectAll,
   handleSortBy,
   handleAction
@@ -56,6 +57,13 @@ const List = ({
           <StatusLoader key="spinner" />
         ]
       : null;
+
+  const _menu =
+    (!_loading && _bridges.length) || filtering ? (
+      <ReduxForm form={MENU_FORM_NAME} destroyOnUnmount={false}>
+        {BridgesListMenuForm}
+      </ReduxForm>
+    ) : null;
 
   const _error =
     error && !_bridges.length && !_loading ? (
@@ -73,6 +81,7 @@ const List = ({
     <ReduxForm
       form={TABLE_FORM_NAME}
       items={_bridges}
+      filtering={filtering}
       actionable={selected.length}
       allowedActions={allowedActions}
       allSelected={_bridges.length && selected.length === _bridges.length}
@@ -97,9 +106,7 @@ const List = ({
   return (
     <ViewContainer main>
       <Divider height={remcalc(30)} transparent />
-      <ReduxForm form={MENU_FORM_NAME} searchable={!_loading}>
-        {BridgesListMenuForm}
-      </ReduxForm>
+      {_menu}
       {_error}
       {_loading}
       {_table}
@@ -156,6 +163,7 @@ export default compose(
       return {
         // is sortOrder !== asc, reverse order
         bridges: sortOrder === 'asc' ? ascSorted : ascSorted.reverse(),
+        filtering: Boolean(filter),
         allowedActions,
         selected,
         index,

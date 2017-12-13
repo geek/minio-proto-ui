@@ -1,3 +1,5 @@
 mutation removeBridge($id: ID!) {
-  deleteBridge(id: $id) { id }
+  deleteBridge(id: $id) {
+    id
+  }
 }
