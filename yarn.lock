@@ -1211,9 +1211,9 @@ babel-preset-jest@^20.0.3:
   dependencies:
     babel-plugin-jest-hoist "^20.0.3"
 
-babel-preset-joyent-portal@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/babel-preset-joyent-portal/-/babel-preset-joyent-portal-4.0.4.tgz#fd8000a6034a07c729fa6145d7d4ab38126361e0"
+babel-preset-joyent-portal@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/babel-preset-joyent-portal/-/babel-preset-joyent-portal-5.0.0.tgz#25d295883d6a7af894c0933cce3dde34c725cc4b"
   dependencies:
     babel-plugin-lodash "^3.3.2"
     babel-plugin-styled-components "^1.3.0"
@@ -1666,12 +1666,12 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000782"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000782.tgz#d8815bce1578c350aced1132507301205e0fab53"
+  version "1.0.30000783"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000783.tgz#16b30d47266a4f515cc69ae0316b670c9603cdbe"
 
 caniuse-lite@^1.0.30000748, caniuse-lite@^1.0.30000780:
-  version "1.0.30000782"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000782.tgz#5b82b8c385f25348745c471ca51320afb1b7f254"
+  version "1.0.30000783"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000783.tgz#9b5499fb1b503d2345d12aa6b8612852f4276ffd"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -2471,7 +2471,7 @@ duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
 
-duplicate-package-checker-webpack-plugin@^2.0.1:
+duplicate-package-checker-webpack-plugin@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/duplicate-package-checker-webpack-plugin/-/duplicate-package-checker-webpack-plugin-2.0.2.tgz#2b01772ec781ec507c8b96615e06deca3552110a"
   dependencies:
@@ -2734,7 +2734,7 @@ eslint-plugin-flowtype@2.39.1:
   dependencies:
     lodash "^4.15.0"
 
-eslint-plugin-flowtype@^2.39.1:
+eslint-plugin-flowtype@^2.40.1:
   version "2.40.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype/-/eslint-plugin-flowtype-2.40.1.tgz#f78a8e6a4cc6da831dd541eb61e803ff0279b796"
   dependencies:
@@ -2861,7 +2861,7 @@ eslint@4.10.0:
     table "^4.0.1"
     text-table "~0.2.0"
 
-eslint@^4.12.1:
+eslint@^4.13.1:
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.13.1.tgz#0055e0014464c7eb7878caf549ef2941992b444f"
   dependencies:
@@ -3529,7 +3529,7 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-tag@^2.0.0, graphql-tag@^2.4.2, graphql-tag@^2.5.0:
+graphql-tag@^2.0.0, graphql-tag@^2.4.2, graphql-tag@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.0.tgz#0fb1b9f6d6651263c47a3420e827910e6fed3952"
 
@@ -4126,10 +4126,8 @@ is-regex@^1.0.4:
     has "^1.0.1"
 
 is-resolvable@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.0.0.tgz#8df57c61ea2e3c501408d100fb013cf8d6e0cc62"
-  dependencies:
-    tryit "^1.0.1"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.0.1.tgz#acca1cd36dbe44b974b924321555a70ba03b1cf4"
 
 is-retry-allowed@^1.0.0:
   version "1.1.0"
@@ -4526,22 +4524,23 @@ joyent-manifest-editor@^1.4.0:
     prop-types "^15.6.0"
     react-codemirror "^1.0.0"
 
-joyent-react-scripts@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/joyent-react-scripts/-/joyent-react-scripts-4.0.1.tgz#89d381a77a7f358b67191464d6cea1bb250c8ec0"
+joyent-react-scripts@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/joyent-react-scripts/-/joyent-react-scripts-6.0.1.tgz#94969808c9a1a6f4cb3bf52737595b613437b14a"
   dependencies:
     apr-for-each "^1.0.6"
     apr-main "^2.0.2"
     babel-minify-webpack-plugin "^0.2.0"
-    duplicate-package-checker-webpack-plugin "^2.0.1"
+    duplicate-package-checker-webpack-plugin "^2.0.2"
     execa "^0.8.0"
     graphql "^0.11.7"
-    graphql-tag "^2.5.0"
+    graphql-tag "^2.6.0"
     jest-transform-graphql "^2.1.0"
     lodash-webpack-plugin "^0.11.4"
     lodash.isstring "^4.0.1"
     mz "^2.7.0"
     react-scripts "^1.0.17"
+    request "^2.83.0"
     webpack-common-shake "^1.5.3"
 
 joyent-ui-toolkit@2.5.0:
@@ -5982,7 +5981,7 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@^1.7.4, prettier@^1.9.0:
+prettier@^1.7.4, prettier@^1.9.2:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.9.2.tgz#96bc2132f7a32338e6078aeb29727178c6335827"
 
@@ -6677,7 +6676,7 @@ request@2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-request@^2.79.0:
+request@^2.79.0, request@^2.83.0:
   version "2.83.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
   dependencies:
@@ -7492,10 +7491,6 @@ trough@^1.0.0:
 try-catch@^1.0.0, try-catch@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/try-catch/-/try-catch-1.0.0.tgz#3797dab39a266775f4d0da5cbf42aca3f03608e6"
-
-tryit@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tryit/-/tryit-1.0.3.tgz#393be730a9446fd1ead6da59a014308f36c289cb"
 
 tty-browserify@0.0.0:
   version "0.0.0"

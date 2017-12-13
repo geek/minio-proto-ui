@@ -60,9 +60,9 @@ export const store = createStore(
     ui: (currState = {}) => currState
   }),
   {}, // Initial state
-  compose(
+  compose(...[
     reduxBatch,
     applyMiddleware(client.middleware()),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
+  ].filter(Boolean))
 );
