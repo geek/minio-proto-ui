@@ -10,13 +10,13 @@ const {
   REACT_APP_GQL_HOSTNAME
 } = process.env;
 
-const GLOBAL_FALLBACK = { location: { hostname: '0.0.0.0' } };
+const GLOBAL_FALLBACK = { location: { hostname: '0.0.0.0', protocol: 'http:', port: 8080 } };
 const GLOBAL = typeof window === 'object' ? window : GLOBAL_FALLBACK;
 
-const GQL_PORT = REACT_APP_GQL_PORT || 443;
-const GQL_PROTOCOL = REACT_APP_GQL_PROTOCOL || 'https';
+const GQL_PORT = REACT_APP_GQL_PORT || GLOBAL.location.port;
+const GQL_PROTOCOL = REACT_APP_GQL_PROTOCOL || GLOBAL.location.protocol;
 const GQL_HOSTNAME = REACT_APP_GQL_HOSTNAME || GLOBAL.location.hostname;
-const GQL_URL = `${GQL_PROTOCOL}://${GQL_HOSTNAME}:${GQL_PORT}/graphql`;
+const GQL_URL = `${GQL_PROTOCOL}//${GQL_HOSTNAME}:${GQL_PORT}/graphql`;
 
 export const client = new ApolloClient({
   dataIdFromObject: o => {
@@ -39,16 +39,16 @@ export const client = new ApolloClient({
     return `${o.__typename}:${id}`;
   },
   networkInterface: createNetworkInterface({
-    uri: GQL_URL
-    // opts: {
-    //   credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin',
+    uri: GQL_URL,
+    opts: {
+      credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin'
     //   headers: {
     //     'X-CSRF-Token': document.cookie.replace(
     //       /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
     //       '$1'
     //     )
     //   }
-    // }
+    }
   })
 });
 
