@@ -10,7 +10,9 @@ const {
   REACT_APP_GQL_HOSTNAME
 } = process.env;
 
-const GLOBAL_FALLBACK = { location: { hostname: '0.0.0.0', protocol: 'http:', port: 8080 } };
+const GLOBAL_FALLBACK = {
+  location: { hostname: '0.0.0.0', protocol: 'http:', port: 8080 }
+};
 const GLOBAL = typeof window === 'object' ? window : GLOBAL_FALLBACK;
 
 const GQL_PORT = REACT_APP_GQL_PORT || GLOBAL.location.port;
@@ -42,12 +44,12 @@ export const client = new ApolloClient({
     uri: GQL_URL,
     opts: {
       credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin'
-    //   headers: {
-    //     'X-CSRF-Token': document.cookie.replace(
-    //       /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
-    //       '$1'
-    //     )
-    //   }
+      //   headers: {
+      //     'X-CSRF-Token': document.cookie.replace(
+      //       /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
+      //       '$1'
+      //     )
+      //   }
     }
   })
 });
@@ -60,9 +62,12 @@ export const store = createStore(
     ui: (currState = {}) => currState
   }),
   {}, // Initial state
-  compose(...[
-    reduxBatch,
-    applyMiddleware(client.middleware()),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ].filter(Boolean))
+  compose(
+    ...[
+      reduxBatch,
+      applyMiddleware(client.middleware()),
+      window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    ].filter(Boolean)
+  )
 );
