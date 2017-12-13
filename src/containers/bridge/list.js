@@ -10,7 +10,7 @@ import sort from 'lodash.sortby';
 import find from 'lodash.find';
 import intercept from 'apr-intercept';
 import remcalc from 'remcalc';
-
+import { Padding } from 'styled-components-spacing';
 import {
   Divider,
   ViewContainer,
@@ -59,12 +59,14 @@ const List = ({
 
   const _error =
     error && !_bridges.length && !_loading ? (
-      <Message error>
-        <MessageTitle>Ooops!</MessageTitle>
-        <MessageDescription>
-          An error occurred while loading your bridges
-        </MessageDescription>
-      </Message>
+      <Padding vertical={3}>
+        <Message error>
+          <MessageTitle>Ooops!</MessageTitle>
+          <MessageDescription>
+            An error occurred while loading your bridges
+          </MessageDescription>
+        </Message>
+      </Padding>
     ) : null;
 
   const _table = !_loading ? (
