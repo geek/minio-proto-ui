@@ -55,7 +55,7 @@ const Show = ({
   ) : null;
 
   const _show =
-    !_loading && !_error ? (
+    !_loading && !_error && hasBridge ? (
       <BridgeShow
         {...bridge}
         resuming={resuming}
@@ -99,7 +99,12 @@ export default compose(
   connect(
     (state, ownProps) => {
       const { bridge = {} } = ownProps;
-      const { id, status } = bridge;
+
+      if (!bridge) {
+        return ownProps;
+      }
+
+      const { id } = bridge;
 
       if (!id) {
         return ownProps;
@@ -109,10 +114,10 @@ export default compose(
 
       return {
         ...ownProps,
-        resuming: status === 'STARTING' || values[`${id}-show-resumeing`],
-        stopping: status === 'STOPPING' || values[`${id}-show-stoping`],
+        resuming: values[`${id}-show-resumeing`],
+        stopping: values[`${id}-show-stoping`],
         removing: values[`${id}-show-removeing`],
-        mutationError: state.values[`${id}-show-mutation-error`]
+        mutationError: values[`${id}-show-mutation-error`]
       };
     },
     (disptach, { refetch, ...ownProps }) => ({
@@ -138,7 +143,7 @@ export default compose(
           })
         );
 
-        if (!err && action === 'delete') {
+        if (!err && action === 'remove') {
           const { history } = ownProps;
           return history.push(`/bridges/`);
         }
