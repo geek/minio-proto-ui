@@ -3,7 +3,8 @@ import { withTheme } from 'styled-components';
 import Value from 'react-redux-values';
 import titleCase from 'title-case';
 import remcalc from 'remcalc';
-
+import styled from 'styled-components';
+import { Padding, Margin } from 'styled-components-spacing';
 import {
   Row,
   Col,
@@ -33,8 +34,17 @@ import {
   Footer,
   StartIcon,
   StopIcon,
-  DeleteIcon
+  DeleteIcon,
+  Card,
+  H3,
+  P
 } from 'joyent-ui-toolkit';
+
+const Wrapper = styled(Padding)`
+  max-Width: 50%;
+  margin: auto;
+  text-align: center
+`;
 
 const { SmallOnly, Medium } = QueryBreakpoints;
 
@@ -251,10 +261,12 @@ export default ({
 }) => (
   <form>
     {error ? (
-      <Message error>
-        <MessageTitle>Ooops!</MessageTitle>
-        <MessageDescription>{error}</MessageDescription>
-      </Message>
+      <Margin vertical={3}>
+        <Message error>
+          <MessageTitle>Ooops!</MessageTitle>
+          <MessageDescription>{error}</MessageDescription>
+        </Message>
+      </Margin>
     ) : null}
     <Table>
       <TableThead>
@@ -305,17 +317,38 @@ export default ({
         </TableTr>
       </TableThead>
       <TableTbody>
-        {items.map(({ id, ...rest }) => (
-          <Item
-            key={id}
-            id={id}
-            {...rest}
-            onStop={() => onStop({ id })}
-            onResume={() => onResume({ id })}
-          />
-        ))}
+        {items.length > 0 &&
+          items.map(({ id, ...rest }) => (
+            <Item
+              key={id}
+              id={id}
+              {...rest}
+              onStop={() => onStop({ id })}
+              onResume={() => onResume({ id })}
+            />
+          ))}
       </TableTbody>
     </Table>
+    {items.length === 0 && (
+      <Row middle="xs">
+        <Col xs="12">
+          <Card>
+            <Wrapper top={5}>
+              <H3>No bridges yet?</H3>
+              <P>
+                You haven’t commissioned any bridges yet, but they’re really
+                easy to set up. Click below to get going.
+              </P>
+              <Margin top={2}>
+                <Button type="submit" to="/bridges/~create">
+                  Create Bridge
+                </Button>
+              </Margin>
+            </Wrapper>
+          </Card>
+        </Col>
+      </Row>
+    )}
     {actionable ? (
       <Actions
         allowedActions={allowedActions}
