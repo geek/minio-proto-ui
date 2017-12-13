@@ -3,5 +3,6 @@ query bridges {
     id
     name
     status
+    directoryMap
   }
 }
