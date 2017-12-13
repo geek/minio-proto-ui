@@ -36,6 +36,7 @@ export default withTheme(
     name,
     namespace,
     username,
+    sshKeyId,
     directoryMap,
     status,
     resuming,
@@ -172,19 +173,19 @@ export default withTheme(
             />
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Id</FormLabel>
-                <Input value={id} fluid />
+                <FormLabel>Access Key</FormLabel>
+                <Input readonly value={username} fluid />
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Username</FormLabel>
-                <Input value={username} fluid />
+                <FormLabel>Secret Key</FormLabel>
+                <Input readonly value={sshKeyId} fluid />
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Namespace</FormLabel>
+                <FormLabel>Minio Host</FormLabel>
                 <Input value={namespace} fluid />
               </Col>
             </Row>
