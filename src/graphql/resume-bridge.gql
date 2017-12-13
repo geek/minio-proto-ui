@@ -1,3 +1,3 @@
 mutation resumeBridge($id: ID!) {
-  resumeBridge(id: $id)
+  resumeBridge(id: $id) { id }
 }

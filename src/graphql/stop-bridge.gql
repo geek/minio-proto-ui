@@ -1,3 +1,3 @@
 mutation stopBridge($id: ID!) {
-  stopBridge(id: $id)
+  stopBridge(id: $id) { id }
 }
