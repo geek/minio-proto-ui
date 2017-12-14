@@ -32,8 +32,11 @@ const stateColor = {
   STARTING: 'primary',
   RUNNING: 'green',
   STOPPING: 'grey',
-  STOPPED: 'grey'
+  STOPPED: 'grey',
+  REMOVING: 'red'
 };
+
+const transitionalStatuses = ['STARTING', 'STOPPING', 'REMOVING'];
 
 const InputIconWrapper = styled.div`
   display: flex;
@@ -98,6 +101,7 @@ class CopyToClipboardTooltip extends Component {
   );
 }
 
+
 export default withTheme(
   ({
     id,
@@ -115,8 +119,10 @@ export default withTheme(
     onRemove,
     submitting,
     theme
-  }) => (
-    <Row>
+  }) => {
+    const isTransitioning = transitionalStatuses.includes(status) || removing || resuming || stopping;
+
+    return (<Row>
       <Col xs={12} sm={12} md={9}>
         <Card>
           <CardOutlet big>
@@ -145,7 +151,7 @@ export default withTheme(
                 <SmallOnly>
                   <Button
                     type="button"
-                    disabled={status !== 'STOPPED'}
+                    disabled={status !== 'STOPPED' || isTransitioning}
                     loading={resuming}
                     onClick={onResume}
                     secondary
@@ -166,14 +172,14 @@ export default withTheme(
                     bold
                     icon
                   >
-                    <StartIcon disabled={status !== 'STOPPED'} />
+                    <StartIcon disabled={status !== 'STOPPED' || isTransitioning} />
                     <span>Resume</span>
                   </Button>
                 </Medium>
                 <SmallOnly>
                   <Button
                     type="button"
-                    disabled={status !== 'RUNNING'}
+                    disabled={status !== 'RUNNING' || isTransitioning}
                     loading={stopping}
                     onClick={onStop}
                     secondary
@@ -181,20 +187,20 @@ export default withTheme(
                     small
                     icon
                   >
-                    <StopIcon disabled={status !== 'RUNNING'} />
+                    <StopIcon disabled={status !== 'RUNNING' || isTransitioning} />
                   </Button>
                 </SmallOnly>
                 <Medium>
                   <Button
                     type="button"
-                    disabled={status !== 'RUNNING'}
+                    disabled={status !== 'RUNNING' || isTransitioning}
                     loading={stopping}
                     onClick={onStop}
                     secondary
                     bold
                     icon
                   >
-                    <StopIcon disabled={status !== 'RUNNING'} />
+                    <StopIcon disabled={status !== 'RUNNING' || isTransitioning} />
                     <span>Stop</span>
                   </Button>
                 </Medium>
@@ -203,6 +209,7 @@ export default withTheme(
                 <SmallOnly>
                   <Button
                     type="button"
+                    disabled={isTransitioning}
                     loading={removing}
                     onClick={onRemove}
                     error
@@ -217,7 +224,7 @@ export default withTheme(
                 <Medium>
                   <Button
                     type="button"
-                    disabled={stopping || resuming}
+                    disabled={isTransitioning}
                     loading={removing}
                     onClick={onRemove}
                     error
@@ -226,8 +233,8 @@ export default withTheme(
                     right
                   >
                     <DeleteIcon
-                      disabled={stopping || resuming}
-                      fill={stopping || resuming ? undefined : theme.red}
+                      disabled={isTransitioning}
+                      fill={isTransitioning ? undefined : theme.red}
                     />
                     <span>Delete</span>
                   </Button>
@@ -270,5 +277,6 @@ export default withTheme(
         </Card>
       </Col>
     </Row>
-  )
+    );
+  }
 );

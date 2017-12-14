@@ -44,7 +44,7 @@ export default ({
                 <FormGroup name="name" reduxForm>
                   <FormLabel>Name</FormLabel>
                   <Input />
-                  <FormMeta />
+                  <FormMeta left />
                 </FormGroup>
               </Col>
             </Row>
@@ -53,7 +53,7 @@ export default ({
                 <FormGroup name="directory-map" reduxForm>
                   <FormLabel>Directory Map</FormLabel>
                   <Input />
-                  <FormMeta />
+                  <FormMeta left />
                 </FormGroup>
               </Col>
             </Row>

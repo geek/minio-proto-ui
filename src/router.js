@@ -9,7 +9,8 @@ import { Header } from '@components/navigation';
 import {
   List as BridgeList,
   Show as BridgeShow,
-  Create as BridgeCreate
+  Create as BridgeCreate,
+  NotFound as BridgeNotFound
 } from '@containers/bridge';
 
 export default () => (
@@ -20,6 +21,7 @@ export default () => (
 
       {/* Breadcrumb */}
       <Switch>
+        <Route path="/bridges/~not-found" component={Breadcrumb} />
         <Route path="/bridges/~:action" component={Breadcrumb} />
         <Route path="/bridges/:bridge?" component={Breadcrumb} />
       </Switch>
@@ -28,6 +30,7 @@ export default () => (
       <Switch>
         <Route path="/bridges" exact component={BridgeList} />
         <Route path="/bridges/~create" exact component={BridgeCreate} />
+        <Route path="/bridges/~not-found" exact component={BridgeNotFound} />
         <Route path="/bridges/:bridge" exact component={BridgeShow} />
       </Switch>
 

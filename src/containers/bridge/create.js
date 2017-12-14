@@ -9,7 +9,10 @@ import remcalc from 'remcalc';
 import { ViewContainer, Divider } from 'joyent-ui-toolkit';
 import BridgeCreateForm from '@components/bridge/create';
 import parseError from '@state/parse-error';
+import { client } from '@state/store';
 import CreatBridge from '@graphql/create-bridge.gql';
+import GetBridges from '@graphql/get-bridge.gql';
+import { error } from 'util';
 
 const TABLE_FORM_NAME = 'bridge-create-form';
 
@@ -30,16 +33,31 @@ const Create = ({ shouldAsyncValidate, handleValidate, handleCreate }) => (
 
 export default compose(
   graphql(CreatBridge, { name: 'create' }),
-  connect(null, (dispatch, { history, create }) => ({
+  connect(null, (dispatch, { history, create, getBridge }) => ({
     shouldAsyncValidate: ({ trigger }) => trigger === 'submit',
-    handleValidate: ({ name, ...values }) => {
+    handleValidate: async ({ name, ...values }) => {
       const errors = {};
 
       if (!name) {
         errors.name = 'Name is required';
       }
 
-      return Promise.resolve(errors);
+      if (!/^[a-zA-Z0-9]+$/.test(name)) {
+        errors.name = 'Name must contain only numbers and letters';
+        return errors;
+      }
+
+      const [err, res]  = await intercept(client.query({ query: GetBridges, variables: { name }}));
+
+      if (err) {
+        return { _error: parseError(err) };
+      }
+
+      if (res.data.bridge) {
+        errors.name = `${name} already exists`;
+      }
+
+      return errors;
     },
     handleCreate: async variables => {
       const [err, bridge] = await intercept(

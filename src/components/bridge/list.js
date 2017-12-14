@@ -27,6 +27,7 @@ import {
   ActionsIcon,
   Popover,
   PopoverItem,
+  PopoverDivider,
   Message,
   MessageTitle,
   MessageDescription,
@@ -50,7 +51,8 @@ const { SmallOnly, Medium } = QueryBreakpoints;
 
 const stateColor = {
   RUNNING: 'green',
-  STOPPED: 'grey'
+  STOPPED: 'grey',
+  REMOVING: 'red'
 };
 
 export const MenuForm = ({ handleSubmit }) => (
@@ -192,7 +194,8 @@ export const Item = ({
   status = '',
   directoryMap = '',
   onStop,
-  onResume
+  onResume,
+  onRemove
 }) => (
   <TableTr>
     <TableTd padding="0" paddingLeft={remcalc(12)} middle left>
@@ -239,6 +242,10 @@ export const Item = ({
             </PopoverItem>
             <PopoverItem onClick={onStop} disabled={status !== 'RUNNING'}>
               Stop
+            </PopoverItem>
+            <PopoverDivider />
+            <PopoverItem onClick={onRemove} disabled={(status !== 'RUNNING') && (status !== 'STOPPED')}>
+              Remove
             </PopoverItem>
           </Popover>
         </TableTd>
@@ -361,6 +368,7 @@ export default ({
                 {...rest}
                 onStop={() => onStop({ id })}
                 onResume={() => onResume({ id })}
+                onRemove={() => onRemove({ id })}
               />
             ))}
         </TableTbody>

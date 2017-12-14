@@ -89,12 +89,19 @@ export default compose(
         name: get(match, 'params.bridge')
       }
     }),
-    props: ({ data: { bridge = {}, loading, error, refetch, ...data } }) => ({
-      bridge,
-      loading,
-      error,
-      refetch
-    })
+    props: ({ data: { bridge = {}, loading, error, refetch, ...data }, ownProps: { history, ...ownProps } }) => {
+
+      if (!loading && !error && (!bridge || !Object.keys(bridge).length)) {
+        return history.push('/bridges/~not-found');
+      }
+
+      return {
+        bridge,
+        loading,
+        error,
+        refetch
+      }
+    }
   }),
   connect(
     (state, ownProps) => {
@@ -145,7 +152,7 @@ export default compose(
 
         if (!err && action === 'remove') {
           const { history } = ownProps;
-          return history.push(`/bridges/`);
+          return history.push('/bridges/');
         }
 
         // after mutation, sets loading back to false
