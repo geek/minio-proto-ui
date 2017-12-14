@@ -39,7 +39,7 @@ const Show = ({
 
   const _error =
     error && !hasBridge && !_loading ? (
-      <Message error>
+      <Message error onCloseClick={false}>
         <MessageTitle>Ooops!</MessageTitle>
         <MessageDescription>
           An error occurred while loading your bridges
@@ -48,7 +48,7 @@ const Show = ({
     ) : null;
 
   const _mutationError = mutationError ? (
-    <Message error>
+    <Message error onCloseClick={false}>
       <MessageTitle>Ooops!</MessageTitle>
       <MessageDescription>{mutationError}</MessageDescription>
     </Message>

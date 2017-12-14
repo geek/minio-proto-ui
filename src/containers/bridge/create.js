@@ -12,7 +12,8 @@ import parseError from '@state/parse-error';
 import { client } from '@state/store';
 import CreatBridge from '@graphql/create-bridge.gql';
 import GetBridges from '@graphql/get-bridge.gql';
-import { error } from 'util';
+import DoesBridgeExist from '@graphql/does-bridge-exist.gql';
+import ListBridges from '@graphql/list-bridges.gql';
 
 const TABLE_FORM_NAME = 'bridge-create-form';
 
@@ -47,27 +48,35 @@ export default compose(
         return errors;
       }
 
-      const [err, res]  = await intercept(client.query({ query: GetBridges, variables: { name }}));
-
+      const [err, res] = await intercept(client.query({ query: DoesBridgeExist, fetchPolicy: 'network-only', variables: { name }}));
       if (err) {
         return { _error: parseError(err) };
       }
 
-      if (res.data.bridge) {
+      if (res.data.doesBridgeExist) {
         errors.name = `${name} already exists`;
       }
 
       return errors;
     },
     handleCreate: async variables => {
-      const [err, bridge] = await intercept(
-        create({
-          variables: {
-            ...variables,
-            directoryMap: variables['directory-map'] || ''
-          }
-        })
-      );
+      const [err, bridge] = await intercept(create({
+        update: (proxy, { data: { createBridge: bridge } }) => {
+          // Read the data from our cache for the affected queries
+          const list = proxy.readQuery({ query: ListBridges });
+
+          // override the cache with the updated bridge
+          list.bridges.push(bridge);
+
+          // Write our data back to the cache
+          proxy.writeQuery({ query: GetBridges, variables: { name: variables.name }, data: { bridge } });
+          proxy.writeQuery({ query: ListBridges, data: list });
+        },
+        variables: {
+          ...variables,
+          directoryMap: variables['directory-map'] || ''
+        }
+      }));
 
       if (err) {
         throw new SubmissionError({

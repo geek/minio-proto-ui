@@ -12,7 +12,7 @@ import {
 export default () => (
   <ViewContainer main>
     <Divider height={remcalc(30)} transparent />
-    <Message error>
+    <Message error onCloseClick={false}>
       <MessageTitle>Ooops!</MessageTitle>
       <MessageDescription>Bridge not found</MessageDescription>
     </Message>

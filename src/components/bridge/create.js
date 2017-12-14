@@ -15,8 +15,13 @@ import {
   Message,
   MessageTitle,
   MessageDescription,
+  Small,
   DuplicateIcon
 } from 'joyent-ui-toolkit';
+
+const Caption = Small.extend`
+  color: ${props => props.theme.placeholder};
+`;
 
 export default ({
   handleSubmit,
@@ -28,7 +33,7 @@ export default ({
     {error ? (
       <Row>
         <Col xs={12}>
-          <Message error>
+          <Message onCloseClick={false} error>
             <MessageTitle>Ooops!</MessageTitle>
             <MessageDescription>{error}</MessageDescription>
           </Message>
@@ -45,15 +50,18 @@ export default ({
                   <FormLabel>Name</FormLabel>
                   <Input />
                   <FormMeta left />
+                  <Caption>Enter a DNS-compliant name</Caption>
                 </FormGroup>
               </Col>
             </Row>
+            <Divider transparent height={remcalc(16)} />
             <Row>
               <Col xs={12} md={7}>
                 <FormGroup name="directory-map" reduxForm>
-                  <FormLabel>Directory Map</FormLabel>
+                  <FormLabel>Base Directory</FormLabel>
                   <Input />
                   <FormMeta left />
+                  <Caption>All subdirectories are available as buckets via S3 API</Caption>
                 </FormGroup>
               </Col>
             </Row>

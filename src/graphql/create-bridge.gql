@@ -1,5 +1,12 @@
 mutation createBridge($name: String!, $directoryMap: String!) {
   createBridge(name: $name, directoryMap: $directoryMap) {
+    id
+    accountId
+    username
+    sshKeyId
+    namespace
     name
+    directoryMap
+    status
   }
 }

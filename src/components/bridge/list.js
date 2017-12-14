@@ -50,8 +50,10 @@ const Wrapper = styled(Padding)`
 const { SmallOnly, Medium } = QueryBreakpoints;
 
 const stateColor = {
+  STARTING: 'primary',
   RUNNING: 'green',
   STOPPED: 'grey',
+  STOPPING: 'grey',
   REMOVING: 'red'
 };
 
@@ -154,7 +156,7 @@ export const Actions = withTheme(
                 <Button
                   type="button"
                   onClick={onRemove}
-                  disabled={submitting}
+                  disabled={!allowedActions.remove}
                   loading={submitting && removing}
                   error
                   secondary
@@ -169,14 +171,14 @@ export const Actions = withTheme(
                 <Button
                   type="button"
                   onClick={onRemove}
-                  disabled={submitting}
+                  disabled={!allowedActions.remove}
                   loading={submitting && removing}
                   error
                   secondary
                   right
                   icon
                 >
-                  <DeleteIcon disabled={submitting} fill={theme.red} />
+                  <DeleteIcon disabled={submitting || !allowedActions.remove} fill={allowedActions.remove ? theme.red : undefined} />
                   <span>Delete</span>
                 </Button>
               </Medium>
@@ -304,7 +306,7 @@ export default ({
   <form>
     {error ? (
       <Margin vertical={3}>
-        <Message error>
+        <Message error onCloseClick={false}>
           <MessageTitle>Ooops!</MessageTitle>
           <MessageDescription>{error}</MessageDescription>
         </Message>

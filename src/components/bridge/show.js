@@ -269,7 +269,7 @@ export default withTheme(
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Directory Map</FormLabel>
+                <FormLabel>Base Directory</FormLabel>
                 <Input value={directoryMap} fluid />
               </Col>
             </Row>

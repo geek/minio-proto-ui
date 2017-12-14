@@ -10,7 +10,6 @@ import sort from 'lodash.sortby';
 import find from 'lodash.find';
 import intercept from 'apr-intercept';
 import remcalc from 'remcalc';
-import { Padding } from 'styled-components-spacing';
 import {
   Divider,
   ViewContainer,
@@ -67,14 +66,12 @@ const List = ({
 
   const _error =
     error && !_bridges.length && !_loading ? (
-      <Padding vertical={3}>
-        <Message error>
+      <Message error onCloseClick={false}>
           <MessageTitle>Ooops!</MessageTitle>
           <MessageDescription>
             An error occurred while loading your bridges
           </MessageDescription>
         </Message>
-      </Padding>
     ) : null;
 
   const _table = !_loading ? (
@@ -156,8 +153,15 @@ export default compose(
         .filter(Boolean);
 
       const allowedActions = {
-        resume: selected.some(({ status }) => status === 'STOPPED'),
-        stop: selected.some(({ status }) => status === 'RUNNING')
+        resume: selected.every(({ id, status }) => {
+          return status === 'STOPPED' && !get(values, `${id}-mutating`, false);
+        }),
+        stop: selected.every(({ id, status }) => {
+          return status === 'RUNNING' && !get(values, `${id}-mutating`, false);
+        }),
+        remove: selected.every(({ id, status }) => {
+          return ['STOPPED', 'RUNNING'].includes(status)  && !get(values, `${id}-mutating`, false);
+        })
       };
 
       return {

@@ -1,0 +1,3 @@
+query doesBridgeExist($name: String!) {
+  doesBridgeExist(name: $name)
+}
