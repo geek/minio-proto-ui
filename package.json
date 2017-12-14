@@ -7,7 +7,8 @@
     "dev": "REACT_APP_GQL_PORT=8080 PORT=3070 REACT_APP_GQL_PROTOCOL='http:' joyent-react-scripts start",
     "fmt": "prettier --write --single-quote *.md src/**/*.js src/**/*.gql",
     "build": "NODE_ENV=production joyent-react-scripts build",
-    "lint": "eslint . --fix --ext .js --ext .md"
+    "lint": "eslint . --fix --ext .js --ext .md",
+    "preversion": "npm run build"
   },
   "dependencies": {
     "@manaflair/redux-batch": "^0.1.0",
