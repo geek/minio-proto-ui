@@ -25,7 +25,7 @@ const Create = ({ shouldAsyncValidate, handleValidate, handleCreate }) => (
       shouldAsyncValidate={shouldAsyncValidate}
       asyncValidate={handleValidate}
       onSubmit={handleCreate}
-      initialValues={{ 'directory-map': '*:/stor/*' }}
+      initialValues={{ 'directory-map': '/stor/' }}
     >
       {BridgeCreateForm}
     </ReduxForm>

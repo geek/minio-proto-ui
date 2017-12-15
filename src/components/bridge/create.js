@@ -63,6 +63,17 @@ export default ({
             </Row>
             <Divider height={remcalc(16)} transparent />
             <Row>
+              <Col xs={12} md={7}>
+                <FormGroup name="directory-map" reduxForm>
+                  <FormLabel>Base Directory</FormLabel>
+                  <Input />
+                  <FormMeta left />
+                  <Caption>All subdirectories are available as buckets via S3 API</Caption>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Divider height={remcalc(16)} transparent />
+            <Row>
               <Col xs={12}>
                 <Button
                   type="submit"
