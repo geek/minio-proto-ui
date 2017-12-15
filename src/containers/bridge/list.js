@@ -177,6 +177,14 @@ export default compose(
     },
     (dispatch, { refetch, ...ownProps }) => ({
       handleAction: async ({ selected, name }) => {
+        if (name === 'remove') {
+          const messageEnd = selected.length === 1 ? 'this bridge' : 'these bridges';
+          const isConfirmed = window.confirm(`Are you sure you want to delete ${messageEnd}?`);
+          if (!isConfirmed) {
+            return false;
+          }
+        }
+
         const action = ownProps[name];
         const gerund = `${name}ing`;
 

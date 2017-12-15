@@ -21,10 +21,15 @@ import {
   StartIcon,
   DotIcon,
   ClipboardIcon,
+  Small,
   TooltipContainer,
   TooltipTarget,
   Tooltip
 } from 'joyent-ui-toolkit';
+
+const Caption = Small.extend`
+  color: ${props => props.theme.placeholder};
+`;
 
 const { SmallOnly, Medium } = QueryBreakpoints;
 
@@ -43,6 +48,8 @@ const InputIconWrapper = styled.div`
   margin-bottom: ${remcalc(10)};
   flex-direction: column;
   align-items: flex-end;
+  height: ${remcalc(48)};
+  padding-bottom: ${remcalc(8)};
 
   input {
     padding-right: ${remcalc(30)};
@@ -56,6 +63,7 @@ const InputIconWrapper = styled.div`
     text-align: center;
   }
 `;
+
 
 const ClipboardIconActionable = styled(ClipboardIcon)`
   cursor: pointer;
@@ -250,27 +258,34 @@ export default withTheme(
               <Col xs={12} md={7}>
                 <FormLabel>Access Key</FormLabel>
                 <Input readonly value={username} fluid />
+                <Caption>This is the "access key" for S3 clients</Caption>
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Secret Key</FormLabel>
+                <Margin top={4}><FormLabel>Secret Key</FormLabel></Margin>
                 <InputIconWrapper>
                   <Input readonly value={sshKeyId} fluid />
                   <CopyToClipboardTooltip>{sshKeyId}</CopyToClipboardTooltip>
                 </InputIconWrapper>
+                <Caption>This is the "secret key" for S3 clients</Caption>
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Minio Host</FormLabel>
-                <Input value={namespace} fluid />
+                <Margin top={4}><FormLabel>Endpoint</FormLabel></Margin>
+                <InputIconWrapper>
+                  <Input readonly value={namespace} fluid />
+                  <CopyToClipboardTooltip>{namespace}</CopyToClipboardTooltip>
+                </InputIconWrapper>
+                <Caption>The S3 v4-compatible endpoint for S3 clients</Caption>
               </Col>
             </Row>
             <Row>
               <Col xs={12} md={7}>
-                <FormLabel>Base Directory</FormLabel>
+                <Margin top={4}><FormLabel>Base Directory</FormLabel></Margin>
                 <Input value={directoryMap} fluid />
+                <Caption>All subdirectories at this directory are available as buckets to S3 clients</Caption>
               </Col>
             </Row>
           </CardOutlet>

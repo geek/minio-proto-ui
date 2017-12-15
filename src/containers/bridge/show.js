@@ -129,6 +129,13 @@ export default compose(
     },
     (disptach, { refetch, ...ownProps }) => ({
       handleAction: async action => {
+        if (action === 'remove') {
+          const isConfirmed = window.confirm('Are you sure you want to delete this bridge?');
+          if (!isConfirmed) {
+            return false;
+          }
+        }
+
         const { bridge } = ownProps;
         const { id } = bridge;
 

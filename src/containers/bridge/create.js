@@ -54,7 +54,7 @@ export default compose(
       }
 
       if (res.data.doesBridgeExist) {
-        errors.name = `${name} already exists`;
+        errors.name = `${name} is not available`;
       }
 
       return errors;
