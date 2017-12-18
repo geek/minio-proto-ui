@@ -178,7 +178,10 @@ export const Actions = withTheme(
                   right
                   icon
                 >
-                  <DeleteIcon disabled={submitting || !allowedActions.remove} fill={allowedActions.remove ? theme.red : undefined} />
+                  <DeleteIcon
+                    disabled={submitting || !allowedActions.remove}
+                    fill={allowedActions.remove ? theme.red : undefined}
+                  />
                   <span>Delete</span>
                 </Button>
               </Medium>
@@ -246,7 +249,10 @@ export const Item = ({
               Stop
             </PopoverItem>
             <PopoverDivider />
-            <PopoverItem onClick={onRemove} disabled={(status !== 'RUNNING') && (status !== 'STOPPED')}>
+            <PopoverItem
+              onClick={onRemove}
+              disabled={status !== 'RUNNING' && status !== 'STOPPED'}
+            >
               Remove
             </PopoverItem>
           </Popover>

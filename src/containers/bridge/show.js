@@ -89,8 +89,10 @@ export default compose(
         name: get(match, 'params.bridge')
       }
     }),
-    props: ({ data: { bridge = {}, loading, error, refetch, ...data }, ownProps: { history, ...ownProps } }) => {
-
+    props: ({
+      data: { bridge = {}, loading, error, refetch, ...data },
+      ownProps: { history, ...ownProps }
+    }) => {
       if (!loading && !error && (!bridge || !Object.keys(bridge).length)) {
         return history.push('/bridges/~not-found');
       }
@@ -100,7 +102,7 @@ export default compose(
         loading,
         error,
         refetch
-      }
+      };
     }
   }),
   connect(
@@ -130,7 +132,10 @@ export default compose(
     (disptach, { refetch, ...ownProps }) => ({
       handleAction: async action => {
         if (action === 'remove') {
-          const isConfirmed = window.confirm('Are you sure you want to delete this bridge?');
+          const isConfirmed = window.confirm(
+            'Are you sure you want to delete this bridge?'
+          );
+
           if (!isConfirmed) {
             return false;
           }

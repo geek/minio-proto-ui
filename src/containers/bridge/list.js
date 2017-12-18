@@ -67,11 +67,11 @@ const List = ({
   const _error =
     error && !_bridges.length && !_loading ? (
       <Message error onCloseClick={false}>
-          <MessageTitle>Ooops!</MessageTitle>
-          <MessageDescription>
-            An error occurred while loading your bridges
-          </MessageDescription>
-        </Message>
+        <MessageTitle>Ooops!</MessageTitle>
+        <MessageDescription>
+          An error occurred while loading your bridges
+        </MessageDescription>
+      </Message>
     ) : null;
 
   const _table = !_loading ? (
@@ -160,7 +160,10 @@ export default compose(
           return status === 'RUNNING' && !get(values, `${id}-mutating`, false);
         }),
         remove: selected.every(({ id, status }) => {
-          return ['STOPPED', 'RUNNING'].includes(status)  && !get(values, `${id}-mutating`, false);
+          return (
+            ['STOPPED', 'RUNNING'].includes(status) &&
+            !get(values, `${id}-mutating`, false)
+          );
         })
       };
 
@@ -178,8 +181,13 @@ export default compose(
     (dispatch, { refetch, ...ownProps }) => ({
       handleAction: async ({ selected, name }) => {
         if (name === 'remove') {
-          const messageEnd = selected.length === 1 ? 'this bridge' : 'these bridges';
-          const isConfirmed = window.confirm(`Are you sure you want to delete ${messageEnd}?`);
+          const messageEnd =
+            selected.length === 1 ? 'this bridge' : 'these bridges';
+
+          const isConfirmed = window.confirm(
+            `Are you sure you want to delete ${messageEnd}?`
+          );
+
           if (!isConfirmed) {
             return false;
           }

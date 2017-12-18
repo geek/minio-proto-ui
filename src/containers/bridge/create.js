@@ -48,7 +48,13 @@ export default compose(
         return errors;
       }
 
-      const [err, res] = await intercept(client.query({ query: DoesBridgeExist, fetchPolicy: 'network-only', variables: { name }}));
+      const [err, res] = await intercept(
+        client.query({
+          query: DoesBridgeExist,
+          fetchPolicy: 'network-only',
+          variables: { name }
+        })
+      );
       if (err) {
         return { _error: parseError(err) };
       }
@@ -60,23 +66,29 @@ export default compose(
       return errors;
     },
     handleCreate: async variables => {
-      const [err, bridge] = await intercept(create({
-        update: (proxy, { data: { createBridge: bridge } }) => {
-          // Read the data from our cache for the affected queries
-          const list = proxy.readQuery({ query: ListBridges });
+      const [err, bridge] = await intercept(
+        create({
+          update: (proxy, { data: { createBridge: bridge } }) => {
+            // Read the data from our cache for the affected queries
+            const list = proxy.readQuery({ query: ListBridges });
 
-          // override the cache with the updated bridge
-          list.bridges.push(bridge);
+            // override the cache with the updated bridge
+            list.bridges.push(bridge);
 
-          // Write our data back to the cache
-          proxy.writeQuery({ query: GetBridges, variables: { name: variables.name }, data: { bridge } });
-          proxy.writeQuery({ query: ListBridges, data: list });
-        },
-        variables: {
-          ...variables,
-          directoryMap: variables['directory-map'] || ''
-        }
-      }));
+            // Write our data back to the cache
+            proxy.writeQuery({
+              query: GetBridges,
+              variables: { name: variables.name },
+              data: { bridge }
+            });
+            proxy.writeQuery({ query: ListBridges, data: list });
+          },
+          variables: {
+            ...variables,
+            directoryMap: variables['directory-map'] || ''
+          }
+        })
+      );
 
       if (err) {
         throw new SubmissionError({

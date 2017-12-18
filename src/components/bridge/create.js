@@ -33,7 +33,10 @@ export default ({
     <Row>
       <Col xs={12} md={9}>
         <Message onCloseClick={false}>
-          <MessageDescription>Creating an S3 bridge adds a new SSH key to your account to allow the bridge to connect to Manta.</MessageDescription>
+          <MessageDescription>
+            Creating an S3 bridge adds a new SSH key to your account to allow
+            the bridge to connect to Manta.
+          </MessageDescription>
         </Message>
       </Col>
     </Row>
@@ -68,7 +71,9 @@ export default ({
                   <FormLabel>Base Directory</FormLabel>
                   <Input />
                   <FormMeta left />
-                  <Caption>All subdirectories are available as buckets via S3 API</Caption>
+                  <Caption>
+                    All subdirectories are available as buckets via S3 API
+                  </Caption>
                 </FormGroup>
               </Col>
             </Row>
