@@ -215,8 +215,8 @@ export const Item = ({
     <TableTd middle left>
       <Anchor to={`/bridges/${name}`}>{name}</Anchor>
     </TableTd>
-    <TableTd middle left xs="0">
-      <code>{directoryMap.substring(0, 7)}</code>
+    <TableTd middle left xs="0" sm="170">
+      <code>{directoryMap.substring(0, 10)}</code>
     </TableTd>
     <TableTd middle left>
       <Value name={`${id}-mutating`}>
@@ -347,7 +347,7 @@ export default ({
             </TableTh>
             <TableTh
               xs="0"
-              sm="130"
+              sm="170"
               onClick={() => onSortBy('directoryMap')}
               sortOrder={sortOrder}
               showSort={sortBy === 'directoryMap'}
