@@ -47,6 +47,10 @@ const Wrapper = styled(Padding)`
   text-align: center;
 `;
 
+const SmallButton = styled(Button)`
+  margin: 0 5px 5px 0;
+`;
+
 const { SmallOnly, Medium } = QueryBreakpoints;
 
 const stateColor = {
@@ -93,7 +97,7 @@ export const Actions = withTheme(
           <Value name="bridge-list-resumeing">
             {({ value: stoping }) => [
               <SmallOnly>
-                <Button
+                <SmallButton
                   type="button"
                   disabled={!allowedActions.resume}
                   onClick={onResume}
@@ -102,7 +106,7 @@ export const Actions = withTheme(
                   icon
                 >
                   <StartIcon disabled={!allowedActions.resume} />
-                </Button>
+                </SmallButton>
               </SmallOnly>,
               <Medium>
                 <Button
@@ -121,7 +125,7 @@ export const Actions = withTheme(
           <Value name="bridge-list-stoping">
             {({ value: stoping }) => [
               <SmallOnly>
-                <Button
+                <SmallButton
                   type="button"
                   disabled={!allowedActions.stop}
                   loading={submitting && stoping}
@@ -131,7 +135,7 @@ export const Actions = withTheme(
                   icon
                 >
                   <StopIcon disabled={!allowedActions.stop} />
-                </Button>
+                </SmallButton>
               </SmallOnly>,
               <Medium>
                 <Button
@@ -153,7 +157,7 @@ export const Actions = withTheme(
           <Value name="bridge-list-removeing">
             {({ value: removing }) => [
               <SmallOnly key="small-only">
-                <Button
+                <SmallButton
                   type="button"
                   onClick={onRemove}
                   disabled={!allowedActions.remove}
@@ -165,7 +169,7 @@ export const Actions = withTheme(
                   icon
                 >
                   <DeleteIcon disabled={submitting} fill={theme.red} />
-                </Button>
+                </SmallButton>
               </SmallOnly>,
               <Medium key="medium">
                 <Button
@@ -211,7 +215,7 @@ export const Item = ({
     <TableTd middle left>
       <Anchor to={`/bridges/${name}`}>{name}</Anchor>
     </TableTd>
-    <TableTd middle left>
+    <TableTd middle left xs="0">
       <code>{directoryMap.substring(0, 7)}</code>
     </TableTd>
     <TableTd middle left>
