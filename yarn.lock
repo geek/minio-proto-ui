@@ -235,21 +235,6 @@ apollo-link-core@^0.5.0:
     graphql-tag "^2.4.2"
     zen-observable-ts "^0.4.4"
 
-apollo@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/apollo/-/apollo-0.2.2.tgz#e409f53765bbf98efa3d127a2789c63bccd025d6"
-  dependencies:
-    breeze-async "0.1.0"
-    breeze-nexttick "0.1.0"
-    breeze-queue "0.2.0"
-    drip "1.1.0"
-    facet "0.3.0"
-    gaia-hash "0.1.1"
-    sherlock "1.0.0"
-    tea-extend "0.2.0"
-    tea-inherits "0.1.0"
-    tea-type "0.1.0"
-
 append-transform@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-0.4.0.tgz#d76ebf8ca94d276e247a36bad44a4b74ab611991"
@@ -1518,19 +1503,9 @@ braces@^1.8.2:
     preserve "^0.2.0"
     repeat-element "^1.1.2"
 
-breeze-async@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/breeze-async/-/breeze-async-0.1.0.tgz#ba4265949980a3d9d8bb9137a61a42e1f87da73a"
-
-breeze-nexttick@*, breeze-nexttick@0.1.0:
+breeze-nexttick@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/breeze-nexttick/-/breeze-nexttick-0.1.0.tgz#d68a56655045d205cb6e36bfaf3c6b2b2c438b2a"
-
-breeze-queue@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/breeze-queue/-/breeze-queue-0.2.0.tgz#c05155cf0244964ba89943c8dcb65729198e8239"
-  dependencies:
-    breeze-nexttick "*"
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -2550,12 +2525,6 @@ dotenv@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
-drip@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/drip/-/drip-1.1.0.tgz#ccefb1e686d86fc115b70c9ec126f8f871bdfd7e"
-  dependencies:
-    tea-concat "0.1.0"
-
 duplexer2@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer2/-/duplexer2-0.1.4.tgz#8b12dab878c0d69e3e7891051662a32fc6bddcc1"
@@ -3244,10 +3213,6 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
-facet@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/facet/-/facet-0.3.0.tgz#1bf949d8a112e2045dda84259407def3deb62c1b"
-
 fast-deep-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.0.0.tgz#96256a3bc975595eb36d82e9929d060d893439ff"
@@ -3531,20 +3496,6 @@ function-bind@^1.0.2, function-bind@^1.1.0, function-bind@^1.1.1:
 functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
-
-gaia-filter@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/gaia-filter/-/gaia-filter-0.1.0.tgz#e029ab04aafaa0137885b8e161e78a48f4eeaf6c"
-  dependencies:
-    tea-properties "0.1.0"
-
-gaia-hash@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/gaia-hash/-/gaia-hash-0.1.1.tgz#d969acbe16a2e5e4dc3d74ac28b24c87d36cf12d"
-  dependencies:
-    gaia-filter "0.1.0"
-    tea-extend "0.2.0"
-    tea-properties "0.1.0"
 
 gauge@~2.7.3:
   version "2.7.4"
@@ -7258,10 +7209,6 @@ shellwords@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
 
-sherlock@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sherlock/-/sherlock-1.0.0.tgz#e246eacfd72c0e3b3e8243a6c9e55340d80c854e"
-
 shot@4.x.x:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/shot/-/shot-4.0.4.tgz#cb0d3f61f6588ee23c3eb077f87b17a100d581a2"
@@ -7685,26 +7632,6 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
-
-tea-concat@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/tea-concat/-/tea-concat-0.1.0.tgz#ea2e907400fdd78a6334ce020fa3c69502d99e84"
-
-tea-extend@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/tea-extend/-/tea-extend-0.2.0.tgz#a820ecc6bc662538c61fe7510f35db475314d5a6"
-
-tea-inherits@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/tea-inherits/-/tea-inherits-0.1.0.tgz#ba83fb9839e0fc59370f65ad999c8fc828d36122"
-
-tea-properties@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/tea-properties/-/tea-properties-0.1.0.tgz#c5c81533da19f3c39afadd15c173a3b6cbc8d1eb"
-
-tea-type@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/tea-type/-/tea-type-0.1.0.tgz#a138a6beb00ff4984874a4f75f3589ef1821af82"
 
 teamwork@3.x.x:
   version "3.0.1"
