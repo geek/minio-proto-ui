@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { ApolloProvider } from 'react-apollo';
 
@@ -44,11 +45,13 @@ const fullTheme = {
 };
 
 export default () => (
-  <ApolloProvider client={client} store={store}>
-    <ThemeProvider theme={fullTheme}>
-      <RootContainer>
-        <Router />
-      </RootContainer>
-    </ThemeProvider>
-  </ApolloProvider>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={fullTheme}>
+        <RootContainer>
+          <Router />
+        </RootContainer>
+      </ThemeProvider>
+    </ApolloProvider>
+  </Provider>
 );

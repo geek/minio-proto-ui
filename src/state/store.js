@@ -1,7 +1,9 @@
 import { reduxBatch } from '@manaflair/redux-batch';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, combineReducers, compose } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { ApolloClient, createNetworkInterface } from 'react-apollo';
+import { ReduxCache, apolloReducer } from 'apollo-cache-redux';
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
 import { reducer as valuesReducer } from 'react-redux-values';
 
 const {
@@ -20,7 +22,26 @@ const GQL_PROTOCOL = REACT_APP_GQL_PROTOCOL || GLOBAL.location.protocol;
 const GQL_HOSTNAME = REACT_APP_GQL_HOSTNAME || GLOBAL.location.hostname;
 const GQL_URL = `${GQL_PROTOCOL}//${GQL_HOSTNAME}:${GQL_PORT}/graphql`;
 
-export const client = new ApolloClient({
+
+export const store = createStore(
+  combineReducers({
+    values: valuesReducer,
+    apollo: apolloReducer,
+    form: formReducer,
+    ui: (currState = {}) => currState
+  }),
+  {}, // Initial state
+  compose(
+    ...[
+      reduxBatch,
+      window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    ].filter(Boolean)
+  )
+);
+
+const cache = new ReduxCache({
+  store,
   dataIdFromObject: o => {
     const id = o.id
       ? o.id
@@ -39,35 +60,15 @@ export const client = new ApolloClient({
                   : 'apollo-cache-key-not-defined';
 
     return `${o.__typename}:${id}`;
-  },
-  networkInterface: createNetworkInterface({
+  }
+});
+
+export const client = new ApolloClient({
+  cache,
+  link: createHttpLink({
     uri: GQL_URL,
-    opts: {
-      credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin'
-      //   headers: {
-      //     'X-CSRF-Token': document.cookie.replace(
-      //       /(?:(?:^|.*;\s*)crumb\s*=\s*([^;]*).*$)|^.*$/,
-      //       '$1'
-      //     )
-      //   }
-    }
+    credentials: process.env.REACT_APP_GQL_URL ? 'include' : 'same-origin'
   })
 });
 
-export const store = createStore(
-  combineReducers({
-    values: valuesReducer,
-    apollo: client.reducer(),
-    form: formReducer,
-    ui: (currState = {}) => currState
-  }),
-  {}, // Initial state
-  compose(
-    ...[
-      reduxBatch,
-      applyMiddleware(client.middleware()),
-      window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
-    ].filter(Boolean)
-  )
-);
+
